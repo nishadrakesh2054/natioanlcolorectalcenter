@@ -2,7 +2,7 @@ import type {
   ColorectalDisease,
   DiseaseContentItem,
   DiseaseContentSection,
-} from "@/lib/colorectalDiseases";
+} from "@/lib/types/colorectal-disease";
 
 function isNestedItem(item: DiseaseContentItem): item is Extract<DiseaseContentItem, { sub_title: string }> {
   return typeof item === "object" && item !== null && "sub_title" in item;

@@ -1,7 +1,7 @@
 import Link from "next/link";
 import SocialLinks from "@/components/layout/SocialLinks";
 import SiteImage from "@/components/ui/SiteImage";
-import type { CaseService } from "@/lib/caseServices";
+import type { CaseService } from "@/lib/types/case-service";
 
 type DetailBlock = {
   title: string;

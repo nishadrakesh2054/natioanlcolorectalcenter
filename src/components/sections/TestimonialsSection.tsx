@@ -1,7 +1,11 @@
 import TestimonialsCarousel from "@/components/sections/TestimonialsCarousel";
-import { testimonials } from "@/lib/testimonials";
+import type { Testimonial } from "@/lib/types/testimonial";
 
-export default function TestimonialsSection() {
+type TestimonialsSectionProps = {
+  items: Testimonial[];
+};
+
+export default function TestimonialsSection({ items }: TestimonialsSectionProps) {
   return (
     <section id="testimonials" className="testimonials section">
       <div className="container">
@@ -16,7 +20,7 @@ export default function TestimonialsSection() {
           </div>
 
           <div className="col-lg-7" data-aos="fade-up" data-aos-delay="200">
-            <TestimonialsCarousel items={testimonials} />
+            <TestimonialsCarousel items={items} />
           </div>
         </div>
       </div>

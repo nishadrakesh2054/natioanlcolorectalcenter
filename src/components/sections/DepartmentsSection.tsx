@@ -3,14 +3,18 @@
 import Link from "next/link";
 import { useLayoutEffect, useRef, useState } from "react";
 import SiteImage from "@/components/ui/SiteImage";
-import { colorectalDiseases } from "@/lib/colorectalDiseases";
+import type { ColorectalDisease } from "@/lib/types/colorectal-disease";
 
 function getPreviewImages(image: string) {
   return Array.from({ length: 4 }, () => image);
 }
 
-export default function DepartmentsSection() {
-  const [activeId, setActiveId] = useState(colorectalDiseases[0].id);
+type DepartmentsSectionProps = {
+  diseases: ColorectalDisease[];
+};
+
+export default function DepartmentsSection({ diseases }: DepartmentsSectionProps) {
+  const [activeId, setActiveId] = useState(diseases[0]?.id ?? 1);
   const [isTruncated, setIsTruncated] = useState(false);
   const navRef = useRef<HTMLElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
@@ -21,8 +25,8 @@ export default function DepartmentsSection() {
   const actionsRef = useRef<HTMLDivElement>(null);
 
   const activeDisease =
-    colorectalDiseases.find((disease) => disease.id === activeId) ?? colorectalDiseases[0];
-  const previewImages = getPreviewImages(activeDisease.image);
+    diseases.find((disease) => disease.id === activeId) ?? diseases[0];
+  const previewImages = activeDisease ? getPreviewImages(activeDisease.image) : [];
 
   useLayoutEffect(() => {
     const updateLayout = () => {
@@ -103,7 +107,7 @@ export default function DepartmentsSection() {
             className="colorectal-disease-nav"
             aria-label="Colorectal conditions"
           >
-            {colorectalDiseases.map((disease, index) => (
+            {diseases.map((disease, index) => (
               <button
                 key={disease.id}
                 type="button"
@@ -126,6 +130,7 @@ export default function DepartmentsSection() {
           </nav>
 
           <div ref={panelRef} className="colorectal-disease-panel">
+            {activeDisease && (
             <div className="colorectal-disease-panel-content details">
               <h3 ref={titleRef}>{activeDisease.title.trim()}</h3>
 
@@ -172,6 +177,7 @@ export default function DepartmentsSection() {
                 )}
               </div>
             </div>
+            )}
           </div>
         </div>
       </div>

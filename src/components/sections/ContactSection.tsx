@@ -1,6 +1,7 @@
 "use client";
 
 import MedilabForm from "@/components/forms/MedilabForm";
+import { submitContactMessage } from "@/lib/contactMessages";
 import { siteContact } from "@/lib/siteContact";
 
 export default function ContactSection() {
@@ -63,7 +64,8 @@ export default function ContactSection() {
 
           <div className="col-lg-8">
             <MedilabForm
-              successMessage="Your message has been received. Supabase integration coming soon."
+              successMessage="Thank you! Your message has been sent. We will get back to you soon."
+              onSubmit={submitContactMessage}
               className="php-email-form"
             >
               <div className="row gy-4" data-aos="fade-up" data-aos-delay="200">
@@ -73,9 +75,14 @@ export default function ContactSection() {
                 <div className="col-md-6">
                   <input type="email" className="form-control" name="email" placeholder="Your Email" required />
                 </div>
-                <div className="col-md-12">
-                  <input type="text" className="form-control" name="subject" placeholder="Subject" required />
+
+                <div className="col-md-6">
+                  <input type="text" className="form-control" name="phone" placeholder="Your Phone" required />
                 </div>
+                <div className="col-md-6">
+                  <input type="text" className="form-control" name="department" placeholder="Department" required />
+                </div>
+
                 <div className="col-md-12">
                   <textarea className="form-control" name="message" rows={6} placeholder="Message" required></textarea>
                 </div>

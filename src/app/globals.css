@@ -1801,10 +1801,180 @@
 }
 
 /*--------------------------------------------------------------
+# Services browse (services page)
+--------------------------------------------------------------*/
+.services-browse-panel {
+  overflow: hidden;
+}
+
+.services-browse-panel-body {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  height: 100%;
+  min-height: 0;
+  overflow-y: auto;
+  padding-right: 2px;
+}
+
+.services-browse-hero {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.services-browse-icon {
+  flex-shrink: 0;
+  width: 72px;
+  height: 72px;
+  border-radius: 12px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: color-mix(in srgb, var(--accent-color), transparent 90%);
+  border: 1px solid color-mix(in srgb, var(--accent-color), transparent 78%);
+}
+
+.services-browse-label {
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--accent-color), transparent 20%);
+  margin-bottom: 4px;
+}
+
+.services-browse-hero h3 {
+  margin: 0;
+  font-size: 22px;
+  line-height: 1.3;
+}
+
+.services-browse-summary {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.65;
+  color: color-mix(in srgb, var(--default-color), transparent 8%);
+}
+
+.services-browse-recovery {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 12px 14px;
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--accent-color), transparent 92%);
+  border-left: 4px solid var(--accent-color);
+}
+
+.services-browse-recovery i {
+  font-size: 18px;
+  color: var(--accent-color);
+  margin-top: 2px;
+}
+
+.services-browse-recovery span {
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: color-mix(in srgb, var(--default-color), transparent 30%);
+}
+
+.services-browse-recovery strong {
+  display: block;
+  font-size: 14px;
+  line-height: 1.45;
+  color: var(--heading-color);
+}
+
+.services-browse-groups {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  min-height: 0;
+}
+
+.services-browse-group {
+  border: 1px solid color-mix(in srgb, var(--accent-color), transparent 84%);
+  border-radius: 8px;
+  padding: 12px 14px;
+  background: color-mix(in srgb, var(--surface-color), var(--accent-color) 2%);
+  min-height: 0;
+}
+
+.services-browse-group-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.services-browse-group-head i {
+  font-size: 16px;
+  color: var(--accent-color);
+}
+
+.services-browse-group-head h4 {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--heading-color);
+}
+
+.services-browse-group ul {
+  margin: 0;
+  padding-left: 18px;
+}
+
+.services-browse-group li {
+  font-size: 13px;
+  line-height: 1.5;
+  margin-bottom: 4px;
+}
+
+.services-browse-group li:last-child {
+  margin-bottom: 0;
+}
+
+.services-browse-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: auto;
+  padding-top: 4px;
+}
+
+@media (max-width: 991px) {
+  .services-browse-groups {
+    grid-template-columns: 1fr;
+  }
+
+  .services-browse-panel {
+    height: auto !important;
+    min-height: 0 !important;
+  }
+}
+
+@media (max-width: 575px) {
+  .services-browse-actions {
+    flex-direction: column;
+  }
+
+  .services-browse-actions .cta-btn {
+    width: 100%;
+    text-align: center;
+  }
+}
+
+/*--------------------------------------------------------------
 # Justified body copy
 --------------------------------------------------------------*/
 :where(.section:not(.hero):not(.page-title):not(.page-hero)) p:not(.doctor-detail-social-title):not(.doctor-detail-role):not(.doctor-detail-designation):not(.doctor-detail-special),
 .colorectal-disease-summary,
+.services-browse-summary,
 .article-detail-content p,
 .article-listing-body p {
   text-align: justify;

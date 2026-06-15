@@ -4,7 +4,7 @@ import { useCallback, useEffect, useState } from "react";
 import useEmblaCarousel from "embla-carousel-react";
 import Autoplay from "embla-carousel-autoplay";
 import SiteImage from "@/components/ui/SiteImage";
-import type { Testimonial } from "@/lib/testimonials";
+import type { Testimonial } from "@/lib/types/testimonial";
 
 type TestimonialsCarouselProps = {
   items: Testimonial[];

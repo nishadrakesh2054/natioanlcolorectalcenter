@@ -1,17 +1,19 @@
 import type { Metadata } from "next";
 import PageTitle from "@/components/layout/PageTitle";
 import DoctorsSection from "@/components/sections/DoctorsSection";
+import { publicPageSeo } from "@/lib/seo";
+import { fetchDoctors } from "@/lib/supabase/fetch-content";
 
-export const metadata: Metadata = {
-  title: "Doctors",
-  description: "Meet NCRC colorectal, pediatric, and gastroenterology specialists.",
-};
+export const metadata: Metadata = publicPageSeo.doctors;
+export const revalidate = 300;
 
-export default function DoctorsPage() {
+export default async function DoctorsPage() {
+  const doctors = await fetchDoctors();
+
   return (
     <>
       <PageTitle title="Doctors" />
-      <DoctorsSection />
+      <DoctorsSection doctors={doctors} />
     </>
   );
 }

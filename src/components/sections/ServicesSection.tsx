@@ -1,8 +1,12 @@
 import Link from "next/link";
 import SiteImage from "@/components/ui/SiteImage";
-import { caseServices } from "@/lib/caseServices";
+import type { CaseService } from "@/lib/types/case-service";
 
-export default function ServicesSection() {
+type ServicesSectionProps = {
+  services: CaseService[];
+};
+
+export default function ServicesSection({ services }: ServicesSectionProps) {
   return (
     <section id="services" className="services section light-background">
       <div className="container section-title" data-aos="fade-up">
@@ -15,7 +19,7 @@ export default function ServicesSection() {
 
       <div className="container">
         <div className="row gy-4">
-          {caseServices.map((service, index) => (
+          {services.map((service, index) => (
             <div
               className="col-lg-4 col-md-6"
               data-aos="fade-up"

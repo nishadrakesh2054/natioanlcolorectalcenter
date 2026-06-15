@@ -31,9 +31,12 @@ export default function HeroSection() {
     <section id="hero" className="hero section light-background">
       <SiteImage
         src="/assets/img/hero-bg.jpg"
-        alt=""
+        alt="National Colorectal Center — expert colorectal care in Nepal"
         fill
         priority
+        fetchPriority="high"
+        sizes="100vw"
+        quality={85}
         data-aos="fade-in"
       />
 

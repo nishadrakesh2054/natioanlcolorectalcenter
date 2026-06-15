@@ -1,4 +1,4 @@
-import type { DoctorSocialLink, DoctorSocialType } from "@/lib/doctors";
+import type { DoctorSocialLink, DoctorSocialType } from "@/lib/types/doctor";
 
 const SOCIAL_ICON: Record<DoctorSocialType, string> = {
   facebook: "bi bi-facebook",

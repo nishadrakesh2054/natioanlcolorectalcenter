@@ -1,6 +1,4 @@
-import { caseServices } from "@/lib/caseServices";
-import { colorectalDiseases } from "@/lib/colorectalDiseases";
-import { doctors } from "@/lib/doctors";
+import { fetchColorectalDiseases, fetchDoctors, fetchServices } from "@/lib/supabase/fetch-content";
 
 export type SiteStat = {
   id: string;
@@ -9,29 +7,37 @@ export type SiteStat = {
   icon: string;
 };
 
-export const siteStats: SiteStat[] = [
-  {
-    id: "doctors",
-    end: doctors.length,
-    label: "Expert Doctors",
-    icon: "bi bi-person-badge",
-  },
-  {
-    id: "services",
-    end: caseServices.length,
-    label: "Medical Services",
-    icon: "bi bi-heart-pulse",
-  },
-  {
-    id: "conditions",
-    end: colorectalDiseases.length,
-    label: "Colorectal Conditions",
-    icon: "bi bi-journal-medical",
-  },
-  {
-    id: "experience",
-    end: 15,
-    label: "Years of Experience",
-    icon: "bi bi-award",
-  },
-];
+export async function getSiteStats(): Promise<SiteStat[]> {
+  const [doctors, services, diseases] = await Promise.all([
+    fetchDoctors(),
+    fetchServices(),
+    fetchColorectalDiseases(),
+  ]);
+
+  return [
+    {
+      id: "doctors",
+      end: doctors.length,
+      label: "Expert Doctors",
+      icon: "bi bi-person-badge",
+    },
+    {
+      id: "services",
+      end: services.length,
+      label: "Medical Services",
+      icon: "bi bi-heart-pulse",
+    },
+    {
+      id: "conditions",
+      end: diseases.length,
+      label: "Colorectal Conditions",
+      icon: "bi bi-journal-medical",
+    },
+    {
+      id: "experience",
+      end: 15,
+      label: "Years of Experience",
+      icon: "bi bi-award",
+    },
+  ];
+}

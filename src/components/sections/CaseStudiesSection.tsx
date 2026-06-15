@@ -1,8 +1,13 @@
 import Link from "next/link";
 import SiteImage from "@/components/ui/SiteImage";
-import { caseStudies, formatCaseStudyDate } from "@/lib/caseStudies";
+import type { CaseStudy } from "@/lib/types/case-study";
+import { formatCaseStudyDate } from "@/lib/types/case-study";
 
-export default function CaseStudiesSection() {
+type CaseStudiesSectionProps = {
+  studies: CaseStudy[];
+};
+
+export default function CaseStudiesSection({ studies }: CaseStudiesSectionProps) {
   return (
     <section id="case-studies" className="article-listing section light-background">
       <div className="container section-title" data-aos="fade-up">
@@ -15,7 +20,7 @@ export default function CaseStudiesSection() {
 
       <div className="container">
         <div className="row gy-4">
-          {caseStudies.map((study, index) => (
+          {studies.map((study, index) => (
             <div
               className="col-lg-4 col-md-6"
               data-aos="fade-up"

@@ -1,8 +1,13 @@
 import Link from "next/link";
 import SiteImage from "@/components/ui/SiteImage";
-import { blogPosts, formatBlogDate } from "@/lib/blogs";
+import type { BlogPost } from "@/lib/types/blog";
+import { formatBlogDate } from "@/lib/types/blog";
 
-export default function BlogsSection() {
+type BlogsSectionProps = {
+  posts: BlogPost[];
+};
+
+export default function BlogsSection({ posts }: BlogsSectionProps) {
   return (
     <section id="blogs" className="article-listing section light-background">
       <div className="container section-title" data-aos="fade-up">
@@ -14,7 +19,7 @@ export default function BlogsSection() {
 
       <div className="container">
         <div className="row gy-4">
-          {blogPosts.map((post, index) => (
+          {posts.map((post, index) => (
             <div
               className="col-lg-4 col-md-6"
               data-aos="fade-up"

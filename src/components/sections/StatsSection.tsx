@@ -1,11 +1,15 @@
-import { siteStats } from "@/lib/stats";
+import type { SiteStat } from "@/lib/stats";
 
-export default function StatsSection() {
+type StatsSectionProps = {
+  stats: SiteStat[];
+};
+
+export default function StatsSection({ stats }: StatsSectionProps) {
   return (
     <section id="stats" className="stats section light-background">
       <div className="container">
         <div className="row gy-4">
-          {siteStats.map((stat) => (
+          {stats.map((stat) => (
             <div key={stat.id} className="col-lg-3 col-md-6 d-flex flex-column align-items-center">
               <i className={stat.icon}></i>
               <div className="stats-item">

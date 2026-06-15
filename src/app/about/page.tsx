@@ -2,28 +2,20 @@ import type { Metadata } from "next";
 import PageTitle from "@/components/layout/PageTitle";
 import AboutSection from "@/components/sections/AboutSection";
 import StatsSection from "@/components/sections/StatsSection";
+import { publicPageSeo } from "@/lib/seo";
+import { getSiteStats } from "@/lib/stats";
 
-export const metadata: Metadata = {
-  title: "About",
-  description:
-    "NCRC is Nepal's first dedicated colorectal center offering screenings, diagnostics, surgical care, and ongoing management of colorectal diseases.",
-  keywords: [
-    "colorectal care Nepal",
-    "NCRC",
-    "colon cancer",
-    "rectal cancer",
-    "colorectal surgery",
-    "screenings",
-    "diagnostics",
-  ],
-};
+export const metadata: Metadata = publicPageSeo.about;
+export const revalidate = 300;
 
-export default function AboutPage() {
+export default async function AboutPage() {
+  const stats = await getSiteStats();
+
   return (
     <>
       <PageTitle title="About Us" />
       <AboutSection />
-      <StatsSection />
+      <StatsSection stats={stats} />
     </>
   );
 }

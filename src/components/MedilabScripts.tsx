@@ -197,7 +197,7 @@ export default function MedilabScripts() {
       />
       <Script
         src="/assets/vendor/aos/aos.js"
-        strategy="afterInteractive"
+        strategy="lazyOnload"
         onLoad={() => {
           aosReadyRef.current = true;
           initAos();

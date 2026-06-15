@@ -2,40 +2,69 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import PageTitle from "@/components/layout/PageTitle";
 import ArticleDetailSection from "@/components/sections/ArticleDetailSection";
-import { blogPosts, formatBlogDate, getBlogById } from "@/lib/blogs";
+import { JsonLd, articleJsonLd, breadcrumbJsonLd } from "@/components/seo/JsonLd";
+import { createPageMetadata, resolveImageUrl } from "@/lib/seo";
+import { formatBlogDate } from "@/lib/types/blog";
+import { fetchBlogById, fetchBlogs } from "@/lib/supabase/fetch-content";
 
 type BlogDetailPageProps = {
   params: Promise<{ id: string }>;
 };
 
-export function generateStaticParams() {
-  return blogPosts.map((post) => ({ id: String(post.id) }));
+export const revalidate = 300;
+
+export async function generateStaticParams() {
+  const posts = await fetchBlogs();
+  return posts.map((post) => ({ id: String(post.id) }));
 }
 
 export async function generateMetadata({ params }: BlogDetailPageProps): Promise<Metadata> {
   const { id } = await params;
-  const post = getBlogById(Number(id));
+  const post = await fetchBlogById(Number(id));
 
   if (!post) {
     return { title: "Blog Not Found" };
   }
 
-  return {
-    title: post.title,
-    description: post.excerpt,
-  };
+  return createPageMetadata({
+    title: post.seo.metaTitle,
+    description: post.seo.metaDescription,
+    path: post.seo.canonicalPath,
+    keywords: post.seo.metaKeywords,
+    image: post.seo.ogImage,
+    openGraphType: "article",
+  });
 }
 
 export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
   const { id } = await params;
-  const post = getBlogById(Number(id));
+  const post = await fetchBlogById(Number(id));
 
   if (!post) {
     notFound();
   }
 
+  const path = `/blogs/${post.id}`;
+
   return (
     <>
+      <JsonLd
+        data={[
+          breadcrumbJsonLd([
+            { name: "Home", path: "/" },
+            { name: "Blogs", path: "/blogs" },
+            { name: post.title, path },
+          ]),
+          articleJsonLd({
+            title: post.title,
+            description: post.excerpt,
+            path,
+            image: resolveImageUrl(post.seo.ogImage),
+            datePublished: post.publishedAt,
+            author: post.author,
+          }),
+        ]}
+      />
       <PageTitle
         title={post.title}
         breadcrumbs={[

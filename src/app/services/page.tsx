@@ -1,18 +1,19 @@
 import type { Metadata } from "next";
 import PageTitle from "@/components/layout/PageTitle";
-import ServicesSection from "@/components/sections/ServicesSection";
+import ServicesBrowseSection from "@/components/sections/ServicesBrowseSection";
+import { publicPageSeo } from "@/lib/seo";
+import { fetchServices } from "@/lib/supabase/fetch-content";
 
-export const metadata: Metadata = {
-  title: "Services",
-  description:
-    "NCRC services including colonoscopy, endoscopy, anal manometry, CRC screening, biofeedback, laser surgery, and more.",
-};
+export const metadata: Metadata = publicPageSeo.services;
+export const revalidate = 300;
 
-export default function ServicesPage() {
+export default async function ServicesPage() {
+  const services = await fetchServices();
+
   return (
     <>
       <PageTitle title="Services" />
-      <ServicesSection />
+      <ServicesBrowseSection services={services} />
     </>
   );
 }

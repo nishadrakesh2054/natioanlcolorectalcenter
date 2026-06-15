@@ -18,6 +18,7 @@ export default function SiteImage({
   className,
   style,
   sizes,
+  quality = 80,
   ...rest
 }: SiteImageProps) {
   const sizedStyle = fluid
@@ -35,6 +36,7 @@ export default function SiteImage({
         className={className}
         style={sizedStyle}
         sizes={sizes ?? "100vw"}
+        quality={quality}
         {...rest}
       />
     );
@@ -49,6 +51,7 @@ export default function SiteImage({
       className={className}
       style={sizedStyle}
       sizes={sizes ?? "(max-width: 768px) 100vw, 640px"}
+      quality={quality}
       {...rest}
     />
   );

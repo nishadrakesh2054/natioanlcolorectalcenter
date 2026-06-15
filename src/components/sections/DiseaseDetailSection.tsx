@@ -2,7 +2,7 @@ import Link from "next/link";
 import SocialLinks from "@/components/layout/SocialLinks";
 import DiseaseDetailContent from "@/components/sections/DiseaseDetailContent";
 import SiteImage from "@/components/ui/SiteImage";
-import type { ColorectalDisease } from "@/lib/colorectalDiseases";
+import type { ColorectalDisease } from "@/lib/types/colorectal-disease";
 
 type DiseaseDetailSectionProps = {
   disease: ColorectalDisease;

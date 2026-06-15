@@ -8,19 +8,55 @@ import FaqSection from "@/components/sections/FaqSection";
 import TestimonialsSection from "@/components/sections/TestimonialsSection";
 import GallerySection from "@/components/sections/GallerySection";
 import ContactSection from "@/components/sections/ContactSection";
+import { getAppointmentDepartments, getAppointmentDoctors } from "@/lib/appointmentOptions";
+import { publicPageSeo } from "@/lib/seo";
+import {
+  fetchColorectalDiseases,
+  fetchDoctors,
+  fetchFaqs,
+  fetchGalleryItems,
+  fetchServices,
+  fetchTestimonials,
+} from "@/lib/supabase/fetch-content";
 
-export default function HomePage() {
+export const metadata = publicPageSeo.home;
+export const revalidate = 300;
+
+export default async function HomePage() {
+  const [
+    services,
+    diseases,
+    doctors,
+    faqs,
+    testimonials,
+    gallery,
+    appointmentDepartments,
+    appointmentDoctors,
+  ] = await Promise.all([
+    fetchServices(),
+    fetchColorectalDiseases(),
+    fetchDoctors(),
+    fetchFaqs(),
+    fetchTestimonials(),
+    fetchGalleryItems(),
+    getAppointmentDepartments(),
+    getAppointmentDoctors(),
+  ]);
+
   return (
     <>
       <HeroSection />
       <AboutSection />
-      <DepartmentsSection />
-      <AppointmentSection />
-      <ServicesSection />
-      <DoctorsSection />
-      <FaqSection />
-      <TestimonialsSection />
-      <GallerySection />
+      <DepartmentsSection diseases={diseases} />
+      <AppointmentSection
+        departments={appointmentDepartments}
+        doctors={appointmentDoctors}
+      />
+      <ServicesSection services={services} />
+      <DoctorsSection doctors={doctors} />
+      <FaqSection items={faqs} />
+      <TestimonialsSection items={testimonials} />
+      <GallerySection items={gallery} />
       <ContactSection />
     </>
   );

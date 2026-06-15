@@ -1,8 +1,8 @@
 import Link from "next/link";
 import DoctorSocialLinks from "@/components/doctors/DoctorSocialLinks";
 import SiteImage from "@/components/ui/SiteImage";
-import type { Doctor } from "@/lib/doctors";
-import { getDoctorImage, getDoctorSocialLinks, isValidEmail } from "@/lib/doctors";
+import type { Doctor } from "@/lib/types/doctor";
+import { getDoctorImage, getDoctorSocialLinks, isValidEmail } from "@/lib/doctor-utils";
 
 type DetailBlock = {
   title: string;

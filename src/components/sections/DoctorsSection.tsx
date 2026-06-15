@@ -1,9 +1,14 @@
 import Link from "next/link";
 import DoctorSocialLinks from "@/components/doctors/DoctorSocialLinks";
 import SiteImage from "@/components/ui/SiteImage";
-import { doctors, getDoctorImage, getDoctorSocialLinks } from "@/lib/doctors";
+import type { Doctor } from "@/lib/types/doctor";
+import { getDoctorImage, getDoctorSocialLinks } from "@/lib/doctor-utils";
 
-export default function DoctorsSection() {
+type DoctorsSectionProps = {
+  doctors: Doctor[];
+};
+
+export default function DoctorsSection({ doctors }: DoctorsSectionProps) {
   return (
     <section id="doctors" className="doctors section">
       <div className="container section-title" data-aos="fade-up">

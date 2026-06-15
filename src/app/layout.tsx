@@ -1,11 +1,9 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Roboto, Poppins, Raleway } from "next/font/google";
-import Header from "@/components/layout/Header";
-import Footer from "@/components/layout/Footer";
-import ScrollTop from "@/components/layout/ScrollTop";
-import Preloader from "@/components/layout/Preloader";
-import MedilabScripts from "@/components/MedilabScripts";
+import SiteChrome from "@/components/layout/SiteChrome";
+import { JsonLd, organizationJsonLd, websiteJsonLd } from "@/components/seo/JsonLd";
 import RouteAssets from "@/components/RouteAssets";
+import { siteMetadata } from "@/lib/seo";
 import "./globals.css";
 
 const roboto = Roboto({
@@ -13,33 +11,31 @@ const roboto = Roboto({
   weight: ["400", "500", "700"],
   variable: "--font-roboto",
   display: "swap",
+  preload: true,
 });
 
 const poppins = Poppins({
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
+  weight: ["500", "600", "700"],
   variable: "--font-poppins",
   display: "swap",
+  preload: false,
 });
 
 const raleway = Raleway({
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
+  weight: ["500", "600", "700"],
   variable: "--font-raleway",
   display: "swap",
+  preload: false,
 });
 
-export const metadata: Metadata = {
-  title: {
-    default: "National Colorectal Center | NCRC Nepal",
-    template: "%s | NCRC",
-  },
-  description:
-    "Expert colorectal care at Nepal's National Colorectal Center (NCRC), Everest Hospital, Baneshwor.",
-  icons: {
-    icon: "/assets/img/favicon.png",
-    apple: "/assets/img/apple-touch-icon.png",
-  },
+export const metadata: Metadata = siteMetadata;
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  themeColor: "#20458F",
 };
 
 export default function RootLayout({
@@ -50,6 +46,8 @@ export default function RootLayout({
   return (
     <html lang="en" data-scroll-behavior="smooth">
       <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link href="/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
         <link href="/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet" />
         <link href="/assets/vendor/aos/aos.css" rel="stylesheet" />
@@ -57,12 +55,8 @@ export default function RootLayout({
         <RouteAssets />
       </head>
       <body className={`${roboto.variable} ${poppins.variable} ${raleway.variable}`}>
-        <Header />
-        <main className="main">{children}</main>
-        <Footer />
-        <ScrollTop />
-        <Preloader />
-        <MedilabScripts />
+        <JsonLd data={[organizationJsonLd(), websiteJsonLd()]} />
+        <SiteChrome>{children}</SiteChrome>
       </body>
     </html>
   );

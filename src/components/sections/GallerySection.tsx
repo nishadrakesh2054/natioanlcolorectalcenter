@@ -1,11 +1,11 @@
 import SiteImage from "@/components/ui/SiteImage";
+import type { GalleryItem } from "@/lib/types/gallery";
 
-const galleryImages = Array.from({ length: 8 }, (_, index) => {
-  const imageNumber = index + 1;
-  return `/assets/img/gallery/gallery-${imageNumber}.jpg`;
-});
+type GallerySectionProps = {
+  items: GalleryItem[];
+};
 
-export default function GallerySection() {
+export default function GallerySection({ items }: GallerySectionProps) {
   return (
     <section id="gallery" className="gallery section">
       <div className="container section-title" data-aos="fade-up">
@@ -15,11 +15,18 @@ export default function GallerySection() {
 
       <div className="container-fluid" data-aos="fade-up" data-aos-delay="100">
         <div className="row g-0">
-          {galleryImages.map((src) => (
-            <div className="col-lg-3 col-md-4" key={src}>
+          {items.map((item) => (
+            <div className="col-lg-3 col-md-4" key={item.id}>
               <div className="gallery-item">
-                <a href={src} className="glightbox" data-gallery="images-gallery">
-                  <SiteImage src={src} alt="" width={480} height={360} className="img-fluid" fluid />
+                <a href={item.src} className="glightbox" data-gallery="images-gallery">
+                  <SiteImage
+                    src={item.src}
+                    alt={item.alt}
+                    width={480}
+                    height={360}
+                    className="img-fluid"
+                    fluid
+                  />
                 </a>
               </div>
             </div>

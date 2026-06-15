@@ -6,12 +6,14 @@ type MedilabFormProps = {
   successMessage: string;
   children: ReactNode;
   className?: string;
+  onSubmit?: (formData: FormData) => Promise<{ error?: string }>;
 };
 
 export default function MedilabForm({
   successMessage,
   children,
   className = "php-email-form",
+  onSubmit,
 }: MedilabFormProps) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -24,6 +26,7 @@ export default function MedilabForm({
     setSent(false);
 
     const form = event.currentTarget;
+    const formData = new FormData(form);
 
     if (!form.checkValidity()) {
       form.reportValidity();
@@ -31,8 +34,15 @@ export default function MedilabForm({
       return;
     }
 
-    // TODO: Connect form submission to Supabase.
-    await new Promise((resolve) => setTimeout(resolve, 400));
+    if (onSubmit) {
+      const result = await onSubmit(formData);
+
+      if (result.error) {
+        setError(result.error);
+        setLoading(false);
+        return;
+      }
+    }
 
     setSent(true);
     form.reset();

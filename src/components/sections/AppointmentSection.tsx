@@ -1,18 +1,29 @@
 "use client";
 
 import MedilabForm from "@/components/forms/MedilabForm";
+import type { AppointmentSelectOption } from "@/lib/appointmentOptions";
+import { submitAppointmentRequest } from "@/lib/appointmentRequests";
 
-export default function AppointmentSection() {
+type AppointmentSectionProps = {
+  departments: AppointmentSelectOption[];
+  doctors: AppointmentSelectOption[];
+};
+
+export default function AppointmentSection({
+  departments,
+  doctors,
+}: AppointmentSectionProps) {
   return (
     <section id="appointment" className="appointment section">
       <div className="container section-title" data-aos="fade-up">
         <h2>Appointment</h2>
-        <p>Necessitatibus eius consequatur ex aliquid fuga eum quidem sint consectetur velit</p>
+        <p>Book a consultation with our colorectal specialists at NCRC.</p>
       </div>
 
       <div className="container" data-aos="fade-up" data-aos-delay="100">
         <MedilabForm
-          successMessage="Your appointment request has been received. Supabase integration coming soon."
+          successMessage="Thank you! Your appointment request has been received. Our team will contact you shortly."
+          onSubmit={submitAppointmentRequest}
         >
           <div className="row">
             <div className="col-md-4 form-group">
@@ -27,22 +38,32 @@ export default function AppointmentSection() {
           </div>
           <div className="row">
             <div className="col-md-4 form-group mt-3">
-              <input type="datetime-local" name="date" className="form-control datepicker" id="date" placeholder="Appointment Date" required />
+              <input
+                type="datetime-local"
+                name="date"
+                className="form-control datepicker"
+                id="date"
+                required
+              />
             </div>
             <div className="col-md-4 form-group mt-3">
               <select name="department" id="department" className="form-select" required defaultValue="">
                 <option value="">Select Department</option>
-                <option value="Department 1">Department 1</option>
-                <option value="Department 2">Department 2</option>
-                <option value="Department 3">Department 3</option>
+                {departments.map((department) => (
+                  <option key={department.value} value={department.value}>
+                    {department.label}
+                  </option>
+                ))}
               </select>
             </div>
             <div className="col-md-4 form-group mt-3">
               <select name="doctor" id="doctor" className="form-select" required defaultValue="">
                 <option value="">Select Doctor</option>
-                <option value="Doctor 1">Doctor 1</option>
-                <option value="Doctor 2">Doctor 2</option>
-                <option value="Doctor 3">Doctor 3</option>
+                {doctors.map((doctor) => (
+                  <option key={doctor.value} value={doctor.value}>
+                    {doctor.label}
+                  </option>
+                ))}
               </select>
             </div>
           </div>
