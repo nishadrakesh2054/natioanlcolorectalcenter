@@ -17,10 +17,6 @@ declare global {
   }
 }
 
-function removePreloader() {
-  document.querySelector("#preloader")?.remove();
-}
-
 function initFaqAccordion() {
   if (document.body.dataset.faqAccordionBound === "true") {
     return;
@@ -64,10 +60,17 @@ function initCoreUi() {
       : selectBody.classList.remove("scrolled");
   };
 
+  const syncMobileNavState = () => {
+    const isOpen = document.body.classList.contains("mobile-nav-active");
+    mobileNavToggleBtn?.setAttribute("aria-expanded", isOpen ? "true" : "false");
+    mobileNavToggleBtn?.setAttribute("aria-label", isOpen ? "Close menu" : "Open menu");
+  };
+
   const mobileNavToogle = () => {
     document.querySelector("body")?.classList.toggle("mobile-nav-active");
     mobileNavToggleBtn?.classList.toggle("bi-list");
     mobileNavToggleBtn?.classList.toggle("bi-x");
+    syncMobileNavState();
   };
 
   const toggleScrollTop = () => {
@@ -87,6 +90,7 @@ function initCoreUi() {
   document.addEventListener("scroll", toggleScrolled, { passive: true });
 
   mobileNavToggleBtn?.addEventListener("click", mobileNavToogle);
+  syncMobileNavState();
 
   document.querySelectorAll("#navmenu a").forEach((navmenu) => {
     navmenu.addEventListener("click", () => {
@@ -156,15 +160,22 @@ export default function MedilabScripts() {
   const needsPureCounter = pageNeedsPureCounter(pathname);
   const needsGlightbox = pageNeedsGlightbox(pathname);
 
+  const initCoreOnce = () => {
+    if (coreInitializedRef.current) {
+      return;
+    }
+    coreInitializedRef.current = true;
+    initCoreUi();
+  };
+
   useLayoutEffect(() => {
+    initCoreOnce();
     initFaqAccordion();
 
     window.scrollTo({ top: 0, left: 0, behavior: "instant" });
     document.documentElement.scrollTop = 0;
     document.body.scrollTop = 0;
     document.body.classList.remove("scrolled");
-
-    removePreloader();
 
     if (aosReadyRef.current) {
       initAos();
@@ -179,22 +190,8 @@ export default function MedilabScripts() {
     }
   }, [needsGlightbox, needsPureCounter, pathname]);
 
-  const initCoreOnce = () => {
-    if (coreInitializedRef.current) {
-      return;
-    }
-    coreInitializedRef.current = true;
-    removePreloader();
-    initCoreUi();
-  };
-
   return (
     <>
-      <Script
-        src="/assets/vendor/bootstrap/js/bootstrap.bundle.min.js"
-        strategy="afterInteractive"
-        onLoad={initCoreOnce}
-      />
       <Script
         src="/assets/vendor/aos/aos.js"
         strategy="lazyOnload"
@@ -206,7 +203,7 @@ export default function MedilabScripts() {
       {needsPureCounter && (
         <Script
           src="/assets/vendor/purecounter/purecounter_vanilla.js"
-          strategy="afterInteractive"
+          strategy="lazyOnload"
           onLoad={() => {
             pureCounterReadyRef.current = true;
             initPureCounter();
@@ -216,7 +213,7 @@ export default function MedilabScripts() {
       {needsGlightbox && (
         <Script
           src="/assets/vendor/glightbox/js/glightbox.min.js"
-          strategy="afterInteractive"
+          strategy="lazyOnload"
           onLoad={() => {
             glightboxReadyRef.current = true;
             initGlightbox();

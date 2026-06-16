@@ -3,13 +3,10 @@
 import { usePathname } from "next/navigation";
 import Footer from "@/components/layout/Footer";
 import Header from "@/components/layout/Header";
-import Preloader from "@/components/layout/Preloader";
 import ScrollTop from "@/components/layout/ScrollTop";
+import SkipToContent from "@/components/layout/SkipToContent";
 import MedilabScripts from "@/components/MedilabScripts";
-
-function isAdminRoute(pathname: string) {
-  return pathname === "/login" || pathname.startsWith("/dashboard");
-}
+import { isAdminRoute } from "@/lib/routeAssets";
 
 export default function SiteChrome({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
@@ -21,11 +18,13 @@ export default function SiteChrome({ children }: { children: React.ReactNode }) 
 
   return (
     <>
+      <SkipToContent />
       <Header />
-      <main className="main">{children}</main>
+      <main id="main-content" className="main" tabIndex={-1}>
+        {children}
+      </main>
       <Footer />
       <ScrollTop />
-      <Preloader />
       <MedilabScripts />
     </>
   );

@@ -30,10 +30,10 @@ export default function Header() {
       <div className="topbar d-flex align-items-center">
         <div className="container d-flex justify-content-center justify-content-md-between">
           <div className="contact-info d-flex align-items-center">
-            <i className="bi bi-envelope d-flex align-items-center">
+            <i className="bi bi-envelope d-flex align-items-center" aria-hidden="true">
               <a href={`mailto:${siteContact.email}`}>{siteContact.email}</a>
             </i>
-            <i className="bi bi-phone d-flex align-items-center ms-4">
+            <i className="bi bi-phone d-flex align-items-center ms-4" aria-hidden="true">
               <a href={`tel:${siteContact.phones.telBinay}`}>{siteContact.phones.header}</a>
             </i>
           </div>
@@ -49,16 +49,15 @@ export default function Header() {
               alt={siteContact.shortName}
               width={80}
               height={80}
-              priority
               autoSize
             />
-            <h1 className="sitename site-brand-name">
+            <span className="sitename site-brand-name">
               <span className="site-brand-line">{siteContact.headerBrand.line1}</span>
               <span className="site-brand-line">{siteContact.headerBrand.line2}</span>
-            </h1>
+            </span>
           </Link>
 
-          <nav id="navmenu" className="navmenu">
+          <nav id="navmenu" className="navmenu" aria-label="Primary navigation">
             <ul>
               {navItems.map((item) => (
                 <li key={item.href}>
@@ -68,7 +67,13 @@ export default function Header() {
                 </li>
               ))}
             </ul>
-            <i className="mobile-nav-toggle d-xl-none bi bi-list"></i>
+            <button
+              type="button"
+              className="mobile-nav-toggle d-xl-none bi bi-list"
+              aria-label="Open menu"
+              aria-expanded="false"
+              aria-controls="navmenu"
+            />
           </nav>
 
           <Link className="cta-btn d-none d-sm-block" href="/appointment">

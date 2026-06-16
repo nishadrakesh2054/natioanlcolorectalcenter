@@ -1,5 +1,3 @@
-"use client";
-
 import { isSocialLinkReady, socialLinks } from "@/lib/siteContact";
 
 type SocialLinksProps = {
@@ -20,22 +18,20 @@ export default function SocialLinks({ className = "" }: SocialLinksProps) {
               rel="noopener noreferrer"
               aria-label={link.label}
             >
-              <i className={`bi ${link.icon}`}></i>
+              <i className={`bi ${link.icon}`} aria-hidden="true"></i>
             </a>
           );
         }
 
         return (
-          <a
+          <span
             key={link.id}
-            href="#"
             className={`${link.className} social-link-pending`}
             aria-label={`${link.label} (link coming soon)`}
             title={`${link.label} — add link in siteContact.ts`}
-            onClick={(event) => event.preventDefault()}
           >
-            <i className={`bi ${link.icon}`}></i>
-          </a>
+            <i className={`bi ${link.icon}`} aria-hidden="true"></i>
+          </span>
         );
       })}
     </div>

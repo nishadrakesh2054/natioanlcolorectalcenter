@@ -52,12 +52,12 @@ export default function MedilabForm({
   return (
     <form
       onSubmit={handleSubmit}
-      role="form"
       className={className}
       noValidate
+      aria-busy={loading}
     >
       {children}
-      <div className="mt-3">
+      <div className="mt-3" aria-live="polite" aria-atomic="true">
         <div className={`loading ${loading ? "d-block" : ""}`}>Loading</div>
         <div className={`error-message ${error ? "d-block" : ""}`}>{error}</div>
         <div className={`sent-message ${sent ? "d-block" : ""}`}>{successMessage}</div>

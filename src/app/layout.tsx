@@ -46,11 +46,8 @@ export default function RootLayout({
   return (
     <html lang="en" data-scroll-behavior="smooth">
       <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link href="/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
         <link href="/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet" />
-        <link href="/assets/vendor/aos/aos.css" rel="stylesheet" />
         <link href="/assets/css/main.css" rel="stylesheet" />
         <RouteAssets />
       </head>

@@ -27,17 +27,53 @@ export default function AppointmentSection({
         >
           <div className="row">
             <div className="col-md-4 form-group">
-              <input type="text" name="name" className="form-control" id="name" placeholder="Your Name" required />
+              <label htmlFor="name" className="visually-hidden">
+                Your name
+              </label>
+              <input
+                type="text"
+                name="name"
+                className="form-control"
+                id="name"
+                placeholder="Your Name"
+                autoComplete="name"
+                required
+              />
             </div>
             <div className="col-md-4 form-group mt-3 mt-md-0">
-              <input type="email" className="form-control" name="email" id="email" placeholder="Your Email" required />
+              <label htmlFor="email" className="visually-hidden">
+                Your email
+              </label>
+              <input
+                type="email"
+                className="form-control"
+                name="email"
+                id="email"
+                placeholder="Your Email"
+                autoComplete="email"
+                required
+              />
             </div>
             <div className="col-md-4 form-group mt-3 mt-md-0">
-              <input type="tel" className="form-control" name="phone" id="phone" placeholder="Your Phone" required />
+              <label htmlFor="phone" className="visually-hidden">
+                Your phone
+              </label>
+              <input
+                type="tel"
+                className="form-control"
+                name="phone"
+                id="phone"
+                placeholder="Your Phone"
+                autoComplete="tel"
+                required
+              />
             </div>
           </div>
           <div className="row">
             <div className="col-md-4 form-group mt-3">
+              <label htmlFor="date" className="visually-hidden">
+                Preferred date and time
+              </label>
               <input
                 type="datetime-local"
                 name="date"
@@ -47,6 +83,9 @@ export default function AppointmentSection({
               />
             </div>
             <div className="col-md-4 form-group mt-3">
+              <label htmlFor="department" className="visually-hidden">
+                Department
+              </label>
               <select name="department" id="department" className="form-select" required defaultValue="">
                 <option value="">Select Department</option>
                 {departments.map((department) => (
@@ -57,6 +96,9 @@ export default function AppointmentSection({
               </select>
             </div>
             <div className="col-md-4 form-group mt-3">
+              <label htmlFor="doctor" className="visually-hidden">
+                Doctor
+              </label>
               <select name="doctor" id="doctor" className="form-select" required defaultValue="">
                 <option value="">Select Doctor</option>
                 {doctors.map((doctor) => (
@@ -68,7 +110,16 @@ export default function AppointmentSection({
             </div>
           </div>
           <div className="form-group mt-3">
-            <textarea className="form-control" name="message" rows={5} placeholder="Message (Optional)"></textarea>
+            <label htmlFor="appointment-message" className="visually-hidden">
+              Message (optional)
+            </label>
+            <textarea
+              id="appointment-message"
+              className="form-control"
+              name="message"
+              rows={5}
+              placeholder="Message (Optional)"
+            ></textarea>
           </div>
           <div className="text-center">
             <button type="submit">Make an Appointment</button>

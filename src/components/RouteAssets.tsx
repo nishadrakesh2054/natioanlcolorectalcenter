@@ -2,9 +2,10 @@
 
 import { useEffect } from "react";
 import { usePathname } from "next/navigation";
-import { pageNeedsGlightbox } from "@/lib/routeAssets";
+import { pageNeedsAos, pageNeedsGlightbox } from "@/lib/routeAssets";
 
 const ROUTE_STYLES = [
+  { id: "ncrc-aos-css", href: "/assets/vendor/aos/aos.css" },
   { id: "ncrc-glightbox-css", href: "/assets/vendor/glightbox/css/glightbox.min.css" },
   { id: "ncrc-gallery-css", href: "/assets/css/gallery.css" },
 ] as const;
@@ -27,20 +28,25 @@ function removeStylesheet(id: string) {
 
 export default function RouteAssets() {
   const pathname = usePathname();
+  const needsAos = pageNeedsAos(pathname);
   const needsGlightbox = pageNeedsGlightbox(pathname);
 
   useEffect(() => {
+    if (needsAos) {
+      ensureStylesheet("ncrc-aos-css", ROUTE_STYLES[0].href);
+    } else {
+      removeStylesheet("ncrc-aos-css");
+    }
+
     if (needsGlightbox) {
-      for (const style of ROUTE_STYLES) {
-        ensureStylesheet(style.id, style.href);
-      }
+      ensureStylesheet("ncrc-glightbox-css", ROUTE_STYLES[1].href);
+      ensureStylesheet("ncrc-gallery-css", ROUTE_STYLES[2].href);
       return;
     }
 
-    for (const style of ROUTE_STYLES) {
-      removeStylesheet(style.id);
-    }
-  }, [needsGlightbox]);
+    removeStylesheet("ncrc-glightbox-css");
+    removeStylesheet("ncrc-gallery-css");
+  }, [needsAos, needsGlightbox]);
 
   return null;
 }

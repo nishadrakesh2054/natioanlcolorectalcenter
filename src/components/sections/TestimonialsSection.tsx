@@ -1,5 +1,14 @@
-import TestimonialsCarousel from "@/components/sections/TestimonialsCarousel";
+import dynamic from "next/dynamic";
 import type { Testimonial } from "@/lib/types/testimonial";
+
+const TestimonialsCarousel = dynamic(
+  () => import("@/components/sections/TestimonialsCarousel"),
+  {
+    loading: () => (
+      <div className="testimonials-carousel-placeholder" aria-hidden="true" />
+    ),
+  }
+);
 
 type TestimonialsSectionProps = {
   items: Testimonial[];

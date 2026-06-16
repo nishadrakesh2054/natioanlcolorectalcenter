@@ -5,10 +5,6 @@ import { useLayoutEffect, useRef, useState } from "react";
 import SiteImage from "@/components/ui/SiteImage";
 import type { ColorectalDisease } from "@/lib/types/colorectal-disease";
 
-function getPreviewImages(image: string) {
-  return Array.from({ length: 4 }, () => image);
-}
-
 type DepartmentsSectionProps = {
   diseases: ColorectalDisease[];
 };
@@ -26,7 +22,6 @@ export default function DepartmentsSection({ diseases }: DepartmentsSectionProps
 
   const activeDisease =
     diseases.find((disease) => disease.id === activeId) ?? diseases[0];
-  const previewImages = activeDisease ? getPreviewImages(activeDisease.image) : [];
 
   useLayoutEffect(() => {
     const updateLayout = () => {
@@ -145,21 +140,16 @@ export default function DepartmentsSection({ diseases }: DepartmentsSectionProps
                 </p>
               </div>
 
-              <div ref={galleryRef} className="colorectal-disease-gallery">
-                {previewImages.map((src, index) => (
-                  <div
-                    className="colorectal-disease-gallery-item"
-                    key={`${activeDisease.id}-${index}`}
-                  >
-                    <SiteImage
-                      src={src}
-                      alt={`${activeDisease.title.trim()} preview ${index + 1}`}
-                      width={240}
-                      height={180}
-                      fluid
-                    />
-                  </div>
-                ))}
+              <div ref={galleryRef} className="colorectal-disease-gallery colorectal-disease-gallery-single">
+                {activeDisease.image && (
+                  <SiteImage
+                    src={activeDisease.image}
+                    alt={`${activeDisease.title.trim()} illustration`}
+                    width={480}
+                    height={360}
+                    fluid
+                  />
+                )}
               </div>
 
               <div ref={actionsRef} className="colorectal-disease-panel-actions">
