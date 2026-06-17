@@ -2,13 +2,15 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import ResourceForm from "@/components/admin/ResourceForm";
 import AdminShell from "@/components/admin/AdminShell";
-import { getRecord } from "@/lib/admin/actions";
+import { getRecord } from "@/lib/admin/queries";
 import { requireAdminUser } from "@/lib/admin/auth";
 import { getAdminResource, recordToFormValues } from "@/lib/admin/resources";
 
 type EditResourcePageProps = {
-  params: Promise<{ resource: string; id: string }>;
+  params: Promise<{ resource: string; recordId: string }>;
 };
+
+export const dynamic = "force-dynamic";
 
 export async function generateMetadata({ params }: EditResourcePageProps): Promise<Metadata> {
   const { resource: slug } = await params;
@@ -21,25 +23,28 @@ export async function generateMetadata({ params }: EditResourcePageProps): Promi
 
 export default async function EditResourcePage({ params }: EditResourcePageProps) {
   await requireAdminUser();
-  const { resource: slug, id } = await params;
+  const { resource: slug, recordId } = await params;
   const resource = getAdminResource(slug);
 
-  if (!resource) {
+  if (!resource || !recordId) {
     notFound();
   }
 
-  const record = await getRecord(slug, Number(id));
+  const record = await getRecord(slug, recordId);
 
   if (!record) {
     notFound();
   }
 
   return (
-    <AdminShell title={`Edit ${resource.label}`}>
+    <AdminShell
+      title={`Edit ${resource.label}`}
+      subtitle="Update content and save to publish changes on the website"
+    >
       <ResourceForm
         resource={resource}
         mode="edit"
-        recordId={Number(id)}
+        recordId={recordId}
         initialValues={recordToFormValues(resource, record)}
       />
     </AdminShell>

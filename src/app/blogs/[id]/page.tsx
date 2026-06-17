@@ -11,7 +11,7 @@ type BlogDetailPageProps = {
   params: Promise<{ id: string }>;
 };
 
-export const revalidate = 300;
+export const revalidate = 60;
 
 export async function generateStaticParams() {
   const posts = await fetchBlogs();

@@ -2,10 +2,8 @@
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import {
-  formValuesToRecord,
-  getAdminResource,
-} from "@/lib/admin/resources";
+import { formValuesToRecord, getAdminResource } from "@/lib/admin/resources";
+import { revalidatePublicContent } from "@/lib/admin/revalidate-public";
 import { getAdminSupabase, requireAdminUser } from "@/lib/admin/auth";
 
 async function nextId(table: string): Promise<number> {
@@ -23,47 +21,12 @@ async function nextId(table: string): Promise<number> {
   return ((data?.[0]?.id as number | undefined) ?? 0) + 1;
 }
 
-export async function listRecords(resourceSlug: string) {
-  await requireAdminUser();
-  const resource = getAdminResource(resourceSlug);
-  if (!resource) {
-    throw new Error("Unknown resource");
+function parseRecordId(rawId: string): string | number {
+  const numericId = Number(rawId);
+  if (Number.isFinite(numericId) && String(numericId) === rawId.trim()) {
+    return numericId;
   }
-
-  const supabase = await getAdminSupabase();
-  const order = resource.orderBy ?? { column: "id", ascending: true };
-
-  const { data, error } = await supabase
-    .from(resource.table)
-    .select("*")
-    .order(order.column, { ascending: order.ascending ?? true });
-
-  if (error) {
-    throw new Error(error.message);
-  }
-
-  return (data ?? []) as Record<string, unknown>[];
-}
-
-export async function getRecord(resourceSlug: string, id: number) {
-  await requireAdminUser();
-  const resource = getAdminResource(resourceSlug);
-  if (!resource) {
-    throw new Error("Unknown resource");
-  }
-
-  const supabase = await getAdminSupabase();
-  const { data, error } = await supabase
-    .from(resource.table)
-    .select("*")
-    .eq("id", id)
-    .maybeSingle();
-
-  if (error) {
-    throw new Error(error.message);
-  }
-
-  return data as Record<string, unknown> | null;
+  return rawId;
 }
 
 export async function createRecord(resourceSlug: string, values: Record<string, string>) {
@@ -73,28 +36,32 @@ export async function createRecord(resourceSlug: string, values: Record<string, 
     return { error: "Unknown resource" };
   }
 
+  let payload: Record<string, unknown>;
   try {
-    const payload = formValuesToRecord(resource, values);
-    payload.id = await nextId(resource.table);
-
-    const supabase = await getAdminSupabase();
-    const { error } = await supabase.from(resource.table).insert(payload);
-
-    if (error) {
-      return { error: error.message };
-    }
-
-    revalidatePath(`/dashboard/${resourceSlug}`);
-    revalidatePath("/");
-    redirect(`/dashboard/${resourceSlug}`);
+    payload = formValuesToRecord(resource, values);
   } catch (error) {
-    return { error: error instanceof Error ? error.message : "Failed to create record" };
+    return {
+      error: error instanceof Error ? error.message : "Failed to prepare record",
+    };
   }
+
+  payload.id = await nextId(resource.table);
+
+  const supabase = await getAdminSupabase();
+  const { error } = await supabase.from(resource.table).insert(payload);
+
+  if (error) {
+    return { error: error.message };
+  }
+
+  revalidatePath(`/dashboard/${resourceSlug}`);
+  revalidatePublicContent(resourceSlug, String(payload.id));
+  return { success: true as const };
 }
 
 export async function updateRecord(
   resourceSlug: string,
-  id: number,
+  rawId: string,
   values: Record<string, string>
 ) {
   await requireAdminUser();
@@ -103,26 +70,33 @@ export async function updateRecord(
     return { error: "Unknown resource" };
   }
 
+  let payload: Record<string, unknown>;
   try {
-    const payload = formValuesToRecord(resource, values);
-    delete payload.id;
-
-    const supabase = await getAdminSupabase();
-    const { error } = await supabase.from(resource.table).update(payload).eq("id", id);
-
-    if (error) {
-      return { error: error.message };
-    }
-
-    revalidatePath(`/dashboard/${resourceSlug}`);
-    revalidatePath("/");
-    redirect(`/dashboard/${resourceSlug}`);
+    payload = formValuesToRecord(resource, values);
   } catch (error) {
-    return { error: error instanceof Error ? error.message : "Failed to update record" };
+    return {
+      error: error instanceof Error ? error.message : "Failed to prepare record",
+    };
   }
+
+  delete payload.id;
+
+  const supabase = await getAdminSupabase();
+  const { error } = await supabase
+    .from(resource.table)
+    .update(payload)
+    .eq("id", parseRecordId(rawId));
+
+  if (error) {
+    return { error: error.message };
+  }
+
+  revalidatePath(`/dashboard/${resourceSlug}`);
+  revalidatePublicContent(resourceSlug, rawId);
+  return { success: true as const };
 }
 
-export async function deleteRecord(resourceSlug: string, id: number) {
+export async function deleteRecord(resourceSlug: string, rawId: string) {
   await requireAdminUser();
   const resource = getAdminResource(resourceSlug);
   if (!resource) {
@@ -130,15 +104,18 @@ export async function deleteRecord(resourceSlug: string, id: number) {
   }
 
   const supabase = await getAdminSupabase();
-  const { error } = await supabase.from(resource.table).delete().eq("id", id);
+  const { error } = await supabase
+    .from(resource.table)
+    .delete()
+    .eq("id", parseRecordId(rawId));
 
   if (error) {
     return { error: error.message };
   }
 
   revalidatePath(`/dashboard/${resourceSlug}`);
-  revalidatePath("/");
-  return { success: true };
+  revalidatePublicContent(resourceSlug, rawId);
+  return { success: true as const };
 }
 
 export async function signOut() {

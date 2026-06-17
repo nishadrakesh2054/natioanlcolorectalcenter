@@ -20,6 +20,7 @@ export default function ImageUploadField({
 }: ImageUploadFieldProps) {
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [showUrlInput, setShowUrlInput] = useState(false);
 
   async function handleFileChange(event: React.ChangeEvent<HTMLInputElement>) {
     const file = event.target.files?.[0];
@@ -43,6 +44,7 @@ export default function ImageUploadField({
 
       const { data } = supabase.storage.from("site-media").getPublicUrl(path);
       onChange(data.publicUrl);
+      setShowUrlInput(false);
     } catch (uploadError) {
       setError(uploadError instanceof Error ? uploadError.message : "Upload failed");
     } finally {
@@ -61,14 +63,16 @@ export default function ImageUploadField({
       {value ? (
         // eslint-disable-next-line @next/next/no-img-element
         <img src={value} alt="Preview" className="admin-image-preview" />
-      ) : null}
+      ) : (
+        <div className="admin-image-placeholder">No image selected</div>
+      )}
 
       <input type="hidden" name={name} value={value} />
 
       <div className="d-flex flex-wrap gap-2 align-items-center">
         <label className="admin-btn-secondary mb-0">
           <i className="bi bi-upload"></i>
-          {uploading ? "Uploading..." : "Upload image"}
+          {uploading ? "Uploading..." : value ? "Replace image" : "Upload image"}
           <input
             type="file"
             accept="image/jpeg,image/png,image/webp,image/gif"
@@ -82,15 +86,25 @@ export default function ImageUploadField({
             Remove
           </button>
         ) : null}
+        <button
+          type="button"
+          className="admin-btn-secondary"
+          onClick={() => setShowUrlInput((current) => !current)}
+        >
+          {showUrlInput ? "Hide URL" : "Paste URL"}
+        </button>
       </div>
 
-      <input
-        type="text"
-        className="form-control"
-        value={value}
-        onChange={(event) => onChange(event.target.value)}
-        placeholder="Or paste image URL"
-      />
+      {showUrlInput ? (
+        <input
+          type="url"
+          className="form-control"
+          value={value}
+          onChange={(event) => onChange(event.target.value)}
+          placeholder="https://... or /assets/img/..."
+          aria-label={`${label} URL`}
+        />
+      ) : null}
 
       {error ? <div className="text-danger small">{error}</div> : null}
     </div>

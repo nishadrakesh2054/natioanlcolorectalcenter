@@ -2,13 +2,15 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import AdminDataTable from "@/components/admin/AdminDataTable";
 import AdminShell from "@/components/admin/AdminShell";
-import { listRecords } from "@/lib/admin/actions";
+import { listRecords } from "@/lib/admin/queries";
 import { requireAdminUser } from "@/lib/admin/auth";
 import { getAdminResource } from "@/lib/admin/resources";
 
 type ResourcePageProps = {
   params: Promise<{ resource: string }>;
 };
+
+export const dynamic = "force-dynamic";
 
 export async function generateMetadata({ params }: ResourcePageProps): Promise<Metadata> {
   const { resource: slug } = await params;
@@ -31,7 +33,7 @@ export default async function ResourceListPage({ params }: ResourcePageProps) {
   const rows = await listRecords(slug);
 
   return (
-    <AdminShell title={resource.labelPlural}>
+    <AdminShell title={resource.labelPlural} subtitle={`Manage ${resource.label.toLowerCase()} content`}>
       <AdminDataTable resource={resource} rows={rows} />
     </AdminShell>
   );

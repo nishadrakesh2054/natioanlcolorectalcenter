@@ -5,7 +5,7 @@ import { publicPageSeo } from "@/lib/seo";
 import { fetchTestimonials } from "@/lib/supabase/fetch-content";
 
 export const metadata: Metadata = publicPageSeo.testimonials;
-export const revalidate = 300;
+export const revalidate = 60;
 
 export default async function TestimonialsPage() {
   const items = await fetchTestimonials();

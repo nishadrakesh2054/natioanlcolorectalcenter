@@ -8,7 +8,7 @@ import {
 } from "@/lib/supabase/fetch-content";
 import { getSiteUrl } from "@/lib/seo";
 
-export const revalidate = 300;
+export const revalidate = 60;
 
 const staticPaths = [
   { path: "", priority: 1, changeFrequency: "weekly" as const },

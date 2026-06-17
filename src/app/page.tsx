@@ -20,7 +20,7 @@ import {
 } from "@/lib/supabase/fetch-content";
 
 export const metadata = publicPageSeo.home;
-export const revalidate = 300;
+export const revalidate = 60;
 
 export default async function HomePage() {
   const [

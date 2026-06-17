@@ -1,8 +1,11 @@
 import {
   arrayToLines,
+  caseStudyBlocksToFormValue,
   diseaseContentToFormValue,
+  emptyCaseStudyBlocksFormValue,
   emptyDiseaseContentFormValue,
   emptySocialLinksFormValue,
+  formValueToCaseStudyBlocks,
   formValueToDiseaseContent,
   formValueToSocialLinks,
   linesToArray,
@@ -22,6 +25,7 @@ export type AdminFieldType =
   | "title-lines"
   | "social-links"
   | "disease-content"
+  | "case-study-blocks"
   | "json";
 
 export type AdminField = {
@@ -261,11 +265,10 @@ export const adminResources: AdminResource[] = [
       { key: "content", label: "Content paragraphs (one per line)", type: "lines", required: true },
       {
         key: "blocks",
-        label: "Content blocks (JSON)",
-        type: "json",
+        label: "Content blocks",
+        type: "case-study-blocks",
         required: true,
-        rows: 10,
-        hint: '[{"title":"Block","icon":"bi bi-heart","items":["item"]}]',
+        hint: "Add highlight blocks shown below the main story. Paste bullet points — one per line.",
       },
       { key: "meta_title", label: "SEO title", type: "text", required: true },
       { key: "meta_description", label: "SEO description", type: "textarea", required: true, rows: 2 },
@@ -312,6 +315,8 @@ export function recordToFormValues(
       values[field.key] = socialLinksToFormValue(raw);
     } else if (field.type === "disease-content") {
       values[field.key] = diseaseContentToFormValue(raw);
+    } else if (field.type === "case-study-blocks") {
+      values[field.key] = caseStudyBlocksToFormValue(raw);
     } else if (field.type === "json") {
       values[field.key] = raw ? JSON.stringify(raw, null, 2) : "";
     } else if (field.type === "boolean") {
@@ -343,6 +348,8 @@ export function formValuesToRecord(
       record[field.key] = formValueToSocialLinks(raw);
     } else if (field.type === "disease-content") {
       record[field.key] = formValueToDiseaseContent(raw);
+    } else if (field.type === "case-study-blocks") {
+      record[field.key] = formValueToCaseStudyBlocks(raw);
     } else if (field.type === "json") {
       record[field.key] = raw.trim() ? JSON.parse(raw) : [];
     } else if (field.type === "number") {
@@ -372,7 +379,9 @@ export function defaultFormValues(resource: AdminResource): Record<string, strin
     } else if (field.type === "number") {
       values[field.key] = "0";
     } else if (field.type === "json") {
-      values[field.key] = field.key === "blocks" ? "[]" : "[]";
+      values[field.key] = "[]";
+    } else if (field.type === "case-study-blocks") {
+      values[field.key] = emptyCaseStudyBlocksFormValue();
     } else if (field.type === "social-links") {
       values[field.key] = emptySocialLinksFormValue();
     } else if (field.type === "disease-content") {

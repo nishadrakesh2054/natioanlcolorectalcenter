@@ -4,7 +4,7 @@ import ContactSection from "@/components/sections/ContactSection";
 import { publicPageSeo } from "@/lib/seo";
 
 export const metadata: Metadata = publicPageSeo.contact;
-export const revalidate = 300;
+export const revalidate = 60;
 
 export default function ContactPage() {
   return (

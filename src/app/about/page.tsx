@@ -6,7 +6,7 @@ import { publicPageSeo } from "@/lib/seo";
 import { getSiteStats } from "@/lib/stats";
 
 export const metadata: Metadata = publicPageSeo.about;
-export const revalidate = 300;
+export const revalidate = 60;
 
 export default async function AboutPage() {
   const stats = await getSiteStats();

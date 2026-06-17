@@ -5,7 +5,7 @@ import { publicPageSeo } from "@/lib/seo";
 import { fetchCaseStudies } from "@/lib/supabase/fetch-content";
 
 export const metadata: Metadata = publicPageSeo.caseStudies;
-export const revalidate = 300;
+export const revalidate = 60;
 
 export default async function CaseStudyPage() {
   const studies = await fetchCaseStudies();

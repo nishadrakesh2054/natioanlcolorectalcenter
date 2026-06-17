@@ -591,13 +591,94 @@
   height: 100%;
 }
 
+.about.about-section-enhanced {
+  position: relative;
+  overflow: hidden;
+  background:
+    linear-gradient(
+      135deg,
+      color-mix(in srgb, var(--accent-color), white 94%) 0%,
+      color-mix(in srgb, var(--accent-color), white 97%) 45%,
+      var(--background-color) 100%
+    );
+}
+
+.about-section-bg {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.about-section-orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(2px);
+}
+
+.about-section-orb-one {
+  width: 280px;
+  height: 280px;
+  top: -80px;
+  right: -60px;
+  background: color-mix(in srgb, var(--accent-color), transparent 84%);
+}
+
+.about-section-orb-two {
+  width: 220px;
+  height: 220px;
+  bottom: -70px;
+  left: -50px;
+  background: color-mix(in srgb, var(--brand-secondary), transparent 88%);
+}
+
+.about .about-media-frame {
+  position: relative;
+  padding: 10px;
+  border-radius: 18px;
+  background: linear-gradient(
+    145deg,
+    color-mix(in srgb, var(--accent-color), white 20%) 0%,
+    color-mix(in srgb, var(--accent-color), white 55%) 100%
+  );
+  box-shadow: 0 14px 40px color-mix(in srgb, var(--accent-color), transparent 78%);
+}
+
+.about .about-media-frame::after {
+  content: "";
+  position: absolute;
+  inset: 10px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.45);
+  pointer-events: none;
+}
+
 .about .about-media-wrap {
   position: relative;
   flex: 1 1 auto;
   min-height: 280px;
-  border-radius: 8px;
+  border-radius: 12px;
   overflow: hidden;
-  box-shadow: 0 8px 28px color-mix(in srgb, var(--accent-color), transparent 82%);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--accent-color), transparent 70%);
+}
+
+.about .about-media-badge {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 12px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: #fff;
+  background: rgba(15, 39, 68, 0.78);
+  backdrop-filter: blur(6px);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.18);
 }
 
 .about .about-media-img {
@@ -606,6 +687,12 @@
   min-height: 280px;
   object-fit: cover;
   display: block;
+  transform: scale(1.01);
+  transition: transform 0.45s ease;
+}
+
+.about .about-media-frame:hover .about-media-img {
+  transform: scale(1.04);
 }
 
 .about .about-quote {
@@ -641,11 +728,18 @@
 }
 
 .about .about-content-col {
-  background: var(--surface-color);
-  border-radius: 8px;
+  background: color-mix(in srgb, var(--surface-color), white 8%);
+  border-radius: 16px;
   padding: 28px 28px 24px;
-  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.06);
-  border: 1px solid color-mix(in srgb, var(--accent-color), transparent 88%);
+  box-shadow: 0 10px 32px color-mix(in srgb, var(--accent-color), transparent 88%);
+  border: 1px solid color-mix(in srgb, var(--accent-color), transparent 84%);
+  backdrop-filter: blur(4px);
+}
+
+.about .about-heading {
+  font-size: clamp(1.45rem, 2.4vw, 1.85rem);
+  line-height: 1.25;
+  margin-bottom: 14px;
 }
 
 .about .about-label {
@@ -658,7 +752,8 @@
   margin-bottom: 8px;
 }
 
-.about .about-content-col h3 {
+.about .about-content-col h3,
+.about .about-content-col .about-heading {
   margin-bottom: 14px;
 }
 
@@ -667,19 +762,32 @@
 }
 
 .about .about-content-col .about-features li {
-  margin-top: 22px;
+  margin-top: 18px;
+  padding: 12px 12px 12px 0;
+  border-radius: 12px;
+  transition: background 0.2s ease;
+}
+
+.about .about-content-col .about-features li:hover {
+  background: color-mix(in srgb, var(--accent-color), transparent 94%);
 }
 
 .about .about-content-col .about-features i {
-  width: 52px;
-  height: 52px;
-  border-radius: 10px;
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  font-size: 22px;
-  background: color-mix(in srgb, var(--accent-color), transparent 88%);
+  font-size: 20px;
+  color: var(--accent-color);
+  background: linear-gradient(
+    145deg,
+    color-mix(in srgb, var(--accent-color), white 70%) 0%,
+    color-mix(in srgb, var(--accent-color), white 82%) 100%
+  );
   margin-right: 16px;
+  box-shadow: 0 4px 12px color-mix(in srgb, var(--accent-color), transparent 82%);
 }
 
 .about .about-media-wrap .pulsating-play-btn {

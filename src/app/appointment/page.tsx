@@ -5,7 +5,7 @@ import { getAppointmentDepartments, getAppointmentDoctors } from "@/lib/appointm
 import { publicPageSeo } from "@/lib/seo";
 
 export const metadata: Metadata = publicPageSeo.appointment;
-export const revalidate = 300;
+export const revalidate = 60;
 
 export default async function AppointmentPage() {
   const [departments, doctors] = await Promise.all([

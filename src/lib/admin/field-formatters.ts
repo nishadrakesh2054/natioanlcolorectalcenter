@@ -201,3 +201,78 @@ export function parseDiseaseContentForm(value: string): DiseaseContentForm {
 export function serializeDiseaseContentForm(form: DiseaseContentForm) {
   return JSON.stringify(form);
 }
+
+export const CASE_STUDY_BLOCK_ICONS = [
+  { value: "bi bi-heart-pulse", label: "Medical" },
+  { value: "bi bi-clipboard2-pulse", label: "Assessment" },
+  { value: "bi bi-bandaid", label: "Treatment" },
+  { value: "bi bi-check-circle", label: "Outcome" },
+  { value: "bi bi-person", label: "Patient" },
+  { value: "bi bi-hospital", label: "Care" },
+  { value: "bi bi-lightbulb", label: "Insight" },
+  { value: "bi bi-shield-check", label: "Safety" },
+  { value: "bi bi-activity", label: "Recovery" },
+] as const;
+
+export type CaseStudyBlockForm = {
+  id: string;
+  title: string;
+  icon: string;
+  items: string;
+};
+
+export type CaseStudyBlocksForm = {
+  blocks: CaseStudyBlockForm[];
+};
+
+export function emptyCaseStudyBlocksFormValue() {
+  return JSON.stringify({ blocks: [] } satisfies CaseStudyBlocksForm);
+}
+
+export function caseStudyBlocksToFormValue(blocks: unknown): string {
+  if (!Array.isArray(blocks)) {
+    return emptyCaseStudyBlocksFormValue();
+  }
+
+  const formBlocks: CaseStudyBlockForm[] = blocks.map((block, index) => ({
+    id: makeId(`block-${index}`),
+    title: String((block as { title?: string }).title ?? ""),
+    icon: String((block as { icon?: string }).icon ?? CASE_STUDY_BLOCK_ICONS[0].value),
+    items: arrayToLines((block as { items?: string[] }).items),
+  }));
+
+  return JSON.stringify({ blocks: formBlocks } satisfies CaseStudyBlocksForm);
+}
+
+export function formValueToCaseStudyBlocks(value: string) {
+  try {
+    const parsed = JSON.parse(value || "{}") as CaseStudyBlocksForm;
+    const blocks = parsed.blocks ?? [];
+
+    return blocks
+      .map((block) => ({
+        title: block.title.trim(),
+        icon: block.icon.trim() || CASE_STUDY_BLOCK_ICONS[0].value,
+        items: linesToArray(block.items),
+      }))
+      .filter((block) => block.title || block.items.length > 0);
+  } catch {
+    return [];
+  }
+}
+
+export function parseCaseStudyBlocksForm(value: string): CaseStudyBlocksForm {
+  try {
+    const parsed = JSON.parse(value || "{}") as CaseStudyBlocksForm;
+    if (!Array.isArray(parsed.blocks)) {
+      return { blocks: [] };
+    }
+    return parsed;
+  } catch {
+    return { blocks: [] };
+  }
+}
+
+export function serializeCaseStudyBlocksForm(form: CaseStudyBlocksForm) {
+  return JSON.stringify(form);
+}

@@ -1,16 +1,19 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
+import CaseStudyBlocksField from "@/components/admin/CaseStudyBlocksField";
 import DiseaseContentField from "@/components/admin/DiseaseContentField";
 import ImageUploadField from "@/components/admin/ImageUploadField";
 import SocialLinksField from "@/components/admin/SocialLinksField";
 import type { AdminField, AdminResource } from "@/lib/admin/resources";
 import { createRecord, updateRecord } from "@/lib/admin/actions";
+import { useAdminToast } from "@/components/admin/AdminToast";
 
 type ResourceFormProps = {
   resource: AdminResource;
   mode: "create" | "edit";
-  recordId?: number;
+  recordId?: string;
   initialValues: Record<string, string>;
 };
 
@@ -40,6 +43,17 @@ function FieldInput({
   if (field.type === "disease-content") {
     return (
       <DiseaseContentField
+        label={field.label}
+        value={value}
+        onChange={onChange}
+        hint={field.hint}
+      />
+    );
+  }
+
+  if (field.type === "case-study-blocks") {
+    return (
+      <CaseStudyBlocksField
         label={field.label}
         value={value}
         onChange={onChange}
@@ -126,6 +140,8 @@ export default function ResourceForm({
   recordId,
   initialValues,
 }: ResourceFormProps) {
+  const router = useRouter();
+  const { showToast } = useAdminToast();
   const [values, setValues] = useState(initialValues);
   const [error, setError] = useState<string | null>(null);
   const [pending, startTransition] = useTransition();
@@ -145,7 +161,17 @@ export default function ResourceForm({
           : await updateRecord(resource.slug, recordId!, values);
 
       if (result?.error) {
+        showToast({ type: "error", message: result.error });
         setError(result.error);
+        return;
+      }
+
+      if (result?.success) {
+        const toastType = mode === "create" ? "created" : "updated";
+        router.push(
+          `/dashboard/${resource.slug}?toast=${toastType}&label=${encodeURIComponent(resource.label)}`
+        );
+        router.refresh();
       }
     });
   }

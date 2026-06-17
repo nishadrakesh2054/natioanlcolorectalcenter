@@ -68,7 +68,7 @@ export default function LoginForm() {
 
       {error ? <div className="alert alert-danger mb-0">{error}</div> : null}
 
-      <button type="submit" className="admin-btn-primary w-100 justify-content-center" disabled={pending}>
+      <button type="submit" className="admin-btn-primary w-100 justify-content-center bg-primary" disabled={pending}>
         {pending ? "Signing in..." : "Sign in"}
       </button>
     </form>

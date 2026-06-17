@@ -5,7 +5,7 @@ import { publicPageSeo } from "@/lib/seo";
 import { fetchGalleryItems } from "@/lib/supabase/fetch-content";
 
 export const metadata: Metadata = publicPageSeo.gallery;
-export const revalidate = 300;
+export const revalidate = 60;
 
 export default async function GalleryPage() {
   const items = await fetchGalleryItems();

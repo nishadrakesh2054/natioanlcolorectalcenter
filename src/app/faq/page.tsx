@@ -6,7 +6,7 @@ import { publicPageSeo } from "@/lib/seo";
 import { fetchFaqs } from "@/lib/supabase/fetch-content";
 
 export const metadata: Metadata = publicPageSeo.faq;
-export const revalidate = 300;
+export const revalidate = 60;
 
 export default async function FaqPage() {
   const items = await fetchFaqs();

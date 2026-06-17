@@ -28,7 +28,10 @@ export default async function NewResourcePage({ params }: NewResourcePageProps) 
   }
 
   return (
-    <AdminShell title={`Add ${resource.label}`}>
+    <AdminShell
+      title={`Add ${resource.label}`}
+      subtitle="Fill in the details below and create a new record"
+    >
       <ResourceForm
         resource={resource}
         mode="create"

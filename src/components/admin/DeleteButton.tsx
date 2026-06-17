@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useTransition } from "react";
+import { useAdminToast } from "@/components/admin/AdminToast";
 import { deleteRecord } from "@/lib/admin/actions";
 
 export default function DeleteButton({
@@ -10,10 +11,11 @@ export default function DeleteButton({
   label,
 }: {
   resourceSlug: string;
-  id: number;
+  id: string;
   label: string;
 }) {
   const router = useRouter();
+  const { showToast } = useAdminToast();
   const [pending, startTransition] = useTransition();
 
   return (
@@ -30,9 +32,14 @@ export default function DeleteButton({
         startTransition(async () => {
           const result = await deleteRecord(resourceSlug, id);
           if (result?.error) {
-            window.alert(result.error);
+            showToast({ type: "error", message: result.error });
             return;
           }
+
+          showToast({
+            type: "success",
+            message: `"${label}" deleted successfully.`,
+          });
           router.refresh();
         });
       }}

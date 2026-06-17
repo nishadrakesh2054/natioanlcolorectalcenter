@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { adminResources } from "@/lib/admin/resources";
+import { ADMIN_RESOURCE_ICONS } from "@/lib/admin/resource-icons";
 import { signOut } from "@/lib/admin/actions";
 
 export default function AdminSidebar() {
@@ -11,21 +12,28 @@ export default function AdminSidebar() {
   return (
     <aside className="admin-sidebar">
       <div className="admin-sidebar-brand">
-        <Link href="/dashboard">NCRC Dashboard</Link>
-        <span>Content management</span>
+        <Link href="/dashboard" className="admin-sidebar-logo">
+          <span className="admin-sidebar-logo-mark">N</span>
+          <span>
+            NCRC Dashboard
+            <small>Content management</small>
+          </span>
+        </Link>
       </div>
 
-      <nav className="admin-nav">
+      <nav className="admin-nav" aria-label="Dashboard navigation">
         <Link href="/dashboard" className={pathname === "/dashboard" ? "active" : ""}>
-          <i className="bi bi-grid-1x2-fill"></i>
+          <i className="bi bi-grid-1x2-fill" aria-hidden="true"></i>
           Overview
         </Link>
         {adminResources.map((resource) => {
           const href = `/dashboard/${resource.slug}`;
           const active = pathname === href || pathname.startsWith(`${href}/`);
+          const icon = ADMIN_RESOURCE_ICONS[resource.slug] ?? "bi bi-folder2-open";
+
           return (
             <Link key={resource.slug} href={href} className={active ? "active" : ""}>
-              <i className="bi bi-folder2-open"></i>
+              <i className={icon} aria-hidden="true"></i>
               {resource.labelPlural}
             </Link>
           );
@@ -33,13 +41,13 @@ export default function AdminSidebar() {
       </nav>
 
       <div className="admin-sidebar-footer">
-        <Link href="/" className="admin-btn-secondary w-100 justify-content-center mb-2">
-          <i className="bi bi-box-arrow-up-right"></i>
+        <Link href="/" className="admin-btn-secondary w-100 justify-content-center mb-2" target="_blank">
+          <i className="bi bi-box-arrow-up-right" aria-hidden="true"></i>
           View site
         </Link>
         <form action={signOut}>
           <button type="submit" className="admin-btn-secondary w-100 justify-content-center">
-            <i className="bi bi-box-arrow-right"></i>
+            <i className="bi bi-box-arrow-right" aria-hidden="true"></i>
             Log out
           </button>
         </form>

@@ -76,19 +76,19 @@ export default function AdminDataTable({
               </tr>
             ) : (
               rows.map((row) => {
-                const id = Number(row.id);
+                const recordId = String(row.id);
                 const title =
-                  String(row.title ?? row.name ?? row.question ?? row.alt ?? id);
+                  String(row.title ?? row.name ?? row.question ?? row.alt ?? recordId);
 
                 return (
-                  <tr key={id}>
+                  <tr key={recordId}>
                     {resource.listColumns.map((column) => (
                       <td key={column.key}>{formatCell(row[column.key], column)}</td>
                     ))}
                     <td>
                       <div className="admin-table-actions">
                         <Link
-                          href={`/dashboard/${resource.slug}/${id}/edit`}
+                          href={`/dashboard/${resource.slug}/edit/${recordId}`}
                           className="admin-icon-btn"
                           title={`Edit ${title}`}
                         >
@@ -96,7 +96,7 @@ export default function AdminDataTable({
                         </Link>
                         <DeleteButton
                           resourceSlug={resource.slug}
-                          id={id}
+                          id={recordId}
                           label={title}
                         />
                       </div>
