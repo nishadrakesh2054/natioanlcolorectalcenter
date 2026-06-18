@@ -1,5 +1,6 @@
 import AdminProviders from "@/components/admin/AdminProviders";
 import AdminSidebar from "@/components/admin/AdminSidebar";
+import { signOut } from "@/lib/admin/actions";
 import "@/app/dashboard/admin.css";
 
 export default function AdminShell({
@@ -24,7 +25,19 @@ export default function AdminShell({
                 <h1 className="admin-topbar-title">{title}</h1>
                 {subtitle ? <p className="admin-topbar-subtitle">{subtitle}</p> : null}
               </div>
-              {actions}
+              <div className="admin-topbar-actions">
+                {actions}
+                <form action={signOut}>
+                  <button
+                    type="submit"
+                    className="admin-icon-btn danger"
+                    title="Log out"
+                    aria-label="Log out"
+                  >
+                    <i className="bi bi-box-arrow-right" aria-hidden="true"></i>
+                  </button>
+                </form>
+              </div>
             </header>
             <div className="admin-content">{children}</div>
           </div>

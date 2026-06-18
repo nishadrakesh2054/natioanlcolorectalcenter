@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { signOut } from "@/lib/admin/actions";
 import { getGroupedAdminResources } from "@/lib/admin/nav-groups";
 import { ADMIN_RESOURCE_ICONS } from "@/lib/admin/resource-icons";
 import type { AdminResource } from "@/lib/admin/resources";
@@ -48,19 +47,6 @@ export default function AdminSidebar() {
           </div>
         ))}
       </nav>
-
-      <div className="admin-sidebar-footer">
-        <Link href="/" className="admin-btn-secondary w-100 justify-content-center mb-2" target="_blank">
-          <i className="bi bi-box-arrow-up-right" aria-hidden="true"></i>
-          View site
-        </Link>
-        <form action={signOut}>
-          <button type="submit" className="admin-btn-secondary w-100 justify-content-center">
-            <i className="bi bi-box-arrow-right" aria-hidden="true"></i>
-            Log out
-          </button>
-        </form>
-      </div>
     </aside>
   );
 }

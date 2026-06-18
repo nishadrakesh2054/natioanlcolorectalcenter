@@ -120,11 +120,6 @@
   margin-top: 0.65rem;
 }
 
-.admin-sidebar-footer {
-  padding: 1rem 1.5rem;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
-}
-
 .admin-main {
   flex: 1;
   min-width: 0;
@@ -156,6 +151,17 @@
   margin: 0.2rem 0 0;
   color: var(--admin-muted);
   font-size: 0.85rem;
+}
+
+.admin-topbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-shrink: 0;
+}
+
+.admin-topbar-actions form {
+  margin: 0;
 }
 
 .admin-content {
