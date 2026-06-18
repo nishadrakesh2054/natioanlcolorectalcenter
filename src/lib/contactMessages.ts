@@ -1,3 +1,4 @@
+import { getContactDepartments, getOptionLabel } from "@/lib/appointmentOptions";
 import { createClient } from "@/utils/supabase/client";
 
 export type ContactMessageInput = {
@@ -8,14 +9,17 @@ export type ContactMessageInput = {
   message: string;
 };
 
-function parseContactForm(formData: FormData): ContactMessageInput | { error: string } {
+async function parseContactForm(
+  formData: FormData
+): Promise<ContactMessageInput | { error: string }> {
+  const departments = await getContactDepartments();
   const name = String(formData.get("name") ?? "").trim();
   const email = String(formData.get("email") ?? "").trim();
   const phone = String(formData.get("phone") ?? "").trim();
-  const department = String(formData.get("department") ?? "").trim();
+  const departmentValue = String(formData.get("department") ?? "").trim();
   const message = String(formData.get("message") ?? "").trim();
 
-  if (!name || !email || !phone || !department || !message) {
+  if (!name || !email || !phone || !departmentValue || !message) {
     return { error: "Please fill in all required fields." };
   }
 
@@ -23,13 +27,19 @@ function parseContactForm(formData: FormData): ContactMessageInput | { error: st
     return { error: "Please enter a valid email address." };
   }
 
-  return { name, email, phone, department, message };
+  return {
+    name,
+    email,
+    phone,
+    department: getOptionLabel(departments, departmentValue),
+    message,
+  };
 }
 
 export async function submitContactMessage(
   formData: FormData
 ): Promise<{ error?: string }> {
-  const parsed = parseContactForm(formData);
+  const parsed = await parseContactForm(formData);
 
   if ("error" in parsed) {
     return { error: parsed.error };

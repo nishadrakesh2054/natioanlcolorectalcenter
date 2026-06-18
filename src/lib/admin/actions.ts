@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import { formValuesToRecord, getAdminResource } from "@/lib/admin/resources";
+import { formValuesToRecord, getAdminResource, isInboxResource } from "@/lib/admin/resources";
 import { revalidatePublicContent } from "@/lib/admin/revalidate-public";
 import { getAdminSupabase, requireAdminUser } from "@/lib/admin/auth";
 
@@ -34,6 +34,10 @@ export async function createRecord(resourceSlug: string, values: Record<string, 
   const resource = getAdminResource(resourceSlug);
   if (!resource) {
     return { error: "Unknown resource" };
+  }
+
+  if (isInboxResource(resource)) {
+    return { error: "Submissions cannot be created from the dashboard." };
   }
 
   let payload: Record<string, unknown>;
@@ -68,6 +72,10 @@ export async function updateRecord(
   const resource = getAdminResource(resourceSlug);
   if (!resource) {
     return { error: "Unknown resource" };
+  }
+
+  if (isInboxResource(resource)) {
+    return { error: "Submissions cannot be edited from the dashboard." };
   }
 
   let payload: Record<string, unknown>;

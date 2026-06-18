@@ -107,6 +107,19 @@
   border-left-color: #5eb3ff;
 }
 
+.admin-nav-section-label {
+  margin: 1rem 1.25rem 0.35rem;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.45);
+}
+
+.admin-nav-group:first-of-type .admin-nav-section-label {
+  margin-top: 0.65rem;
+}
+
 .admin-sidebar-footer {
   padding: 1rem 1.5rem;
   border-top: 1px solid rgba(255, 255, 255, 0.1);
@@ -421,6 +434,19 @@
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
   gap: 1rem;
+}
+
+.admin-dashboard-section-title {
+  margin: 0 0 0.85rem;
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--admin-muted);
+}
+
+.admin-dashboard-group + .admin-dashboard-group {
+  margin-top: 1.75rem;
 }
 
 .admin-dashboard-tile {

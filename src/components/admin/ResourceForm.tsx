@@ -8,6 +8,7 @@ import DiseaseContentField from "@/components/admin/DiseaseContentField";
 import ImageUploadField from "@/components/admin/ImageUploadField";
 import SocialLinksField from "@/components/admin/SocialLinksField";
 import type { AdminField, AdminResource } from "@/lib/admin/resources";
+import { isInboxResource } from "@/lib/admin/resources";
 import { createRecord, updateRecord } from "@/lib/admin/actions";
 import { useAdminToast } from "@/components/admin/AdminToast";
 
@@ -22,12 +23,45 @@ function FieldInput({
   field,
   value,
   onChange,
+  readOnly = false,
 }: {
   field: AdminField;
   value: string;
   onChange: (value: string) => void;
+  readOnly?: boolean;
 }) {
   const id = field.key;
+
+  if (field.type === "datetime" || (readOnly && field.type !== "boolean")) {
+    const isTextarea = field.type === "textarea" || field.type === "json" || field.type === "lines";
+
+    return (
+      <div>
+        <label className="form-label" htmlFor={id}>
+          {field.label}
+        </label>
+        {isTextarea ? (
+          <textarea
+            id={id}
+            name={field.key}
+            className="form-control"
+            rows={field.rows ?? 6}
+            value={value}
+            readOnly
+          />
+        ) : (
+          <input
+            id={id}
+            name={field.key}
+            type="text"
+            className="form-control"
+            value={value}
+            readOnly
+          />
+        )}
+      </div>
+    );
+  }
 
   if (field.type === "image") {
     return (
@@ -157,6 +191,7 @@ export default function ResourceForm({
   const [values, setValues] = useState(initialValues);
   const [error, setError] = useState<string | null>(null);
   const [pending, startTransition] = useTransition();
+  const readOnly = isInboxResource(resource);
 
   function setField(key: string, value: string) {
     setValues((current) => ({ ...current, [key]: value }));
@@ -164,6 +199,10 @@ export default function ResourceForm({
 
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    if (readOnly) {
+      return;
+    }
+
     setError(null);
 
     startTransition(async () => {
@@ -192,7 +231,11 @@ export default function ResourceForm({
     <div className="admin-card">
       <div className="admin-card-header">
         <h2 className="h6 mb-0">
-          {mode === "create" ? `Add ${resource.label}` : `Edit ${resource.label}`}
+          {readOnly
+            ? `View ${resource.label}`
+            : mode === "create"
+              ? `Add ${resource.label}`
+              : `Edit ${resource.label}`}
         </h2>
       </div>
 
@@ -203,18 +246,27 @@ export default function ResourceForm({
             field={field}
             value={values[field.key] ?? ""}
             onChange={(value) => setField(field.key, value)}
+            readOnly={readOnly}
           />
         ))}
 
         {error ? <div className="alert alert-danger mb-0">{error}</div> : null}
 
         <div className="d-flex gap-2">
-          <button type="submit" className="admin-btn-primary" disabled={pending}>
-            {pending ? "Saving..." : mode === "create" ? "Create" : "Save changes"}
-          </button>
-          <a href={`/dashboard/${resource.slug}`} className="admin-btn-secondary">
-            Cancel
-          </a>
+          {readOnly ? (
+            <a href={`/dashboard/${resource.slug}`} className="admin-btn-secondary">
+              Back to list
+            </a>
+          ) : (
+            <>
+              <button type="submit" className="admin-btn-primary" disabled={pending}>
+                {pending ? "Saving..." : mode === "create" ? "Create" : "Save changes"}
+              </button>
+              <a href={`/dashboard/${resource.slug}`} className="admin-btn-secondary">
+                Cancel
+              </a>
+            </>
+          )}
         </div>
       </form>
     </div>

@@ -1,10 +1,24 @@
 "use client";
 
 import MedilabForm from "@/components/forms/MedilabForm";
+import type { AppointmentSelectOption } from "@/lib/appointmentOptions";
 import { submitContactMessage } from "@/lib/contactMessages";
 import { siteContact } from "@/lib/siteContact";
 
-export default function ContactSection() {
+type ContactSectionProps = {
+  departments: AppointmentSelectOption[];
+  /** Plain ids (name, email, …) — use only on /contact where no other form exists */
+  simpleFieldIds?: boolean;
+};
+
+function fieldId(simpleFieldIds: boolean, key: string) {
+  return simpleFieldIds ? key : `contact-${key}`;
+}
+
+export default function ContactSection({
+  departments,
+  simpleFieldIds = false,
+}: ContactSectionProps) {
   return (
     <section id="contact" className="contact section">
       <div className="container section-title" data-aos="fade-up">
@@ -67,14 +81,14 @@ export default function ContactSection() {
               onSubmit={submitContactMessage}
               className="php-email-form"
             >
-              <div className="row gy-4" data-aos="fade-up" data-aos-delay="200">
-                <div className="col-md-6">
-                  <label htmlFor="contact-name" className="visually-hidden">
+              <div className="row">
+                <div className="col-md-6 form-group">
+                  <label htmlFor={fieldId(simpleFieldIds, "name")} className="visually-hidden">
                     Your name
                   </label>
                   <input
                     type="text"
-                    id="contact-name"
+                    id={fieldId(simpleFieldIds, "name")}
                     name="name"
                     className="form-control"
                     placeholder="Your Name"
@@ -82,13 +96,13 @@ export default function ContactSection() {
                     required
                   />
                 </div>
-                <div className="col-md-6">
-                  <label htmlFor="contact-email" className="visually-hidden">
+                <div className="col-md-6 form-group mt-3 mt-md-0">
+                  <label htmlFor={fieldId(simpleFieldIds, "email")} className="visually-hidden">
                     Your email
                   </label>
                   <input
                     type="email"
-                    id="contact-email"
+                    id={fieldId(simpleFieldIds, "email")}
                     className="form-control"
                     name="email"
                     placeholder="Your Email"
@@ -96,14 +110,15 @@ export default function ContactSection() {
                     required
                   />
                 </div>
-
-                <div className="col-md-6">
-                  <label htmlFor="contact-phone" className="visually-hidden">
+              </div>
+              <div className="row">
+                <div className="col-md-6 form-group mt-3">
+                  <label htmlFor={fieldId(simpleFieldIds, "phone")} className="visually-hidden">
                     Your phone
                   </label>
                   <input
                     type="tel"
-                    id="contact-phone"
+                    id={fieldId(simpleFieldIds, "phone")}
                     className="form-control"
                     name="phone"
                     placeholder="Your Phone"
@@ -111,36 +126,41 @@ export default function ContactSection() {
                     required
                   />
                 </div>
-                <div className="col-md-6">
-                  <label htmlFor="contact-department" className="visually-hidden">
+                <div className="col-md-6 form-group mt-3">
+                  <label htmlFor={fieldId(simpleFieldIds, "department")} className="visually-hidden">
                     Department
                   </label>
-                  <input
-                    type="text"
-                    id="contact-department"
-                    className="form-control"
+                  <select
+                    id={fieldId(simpleFieldIds, "department")}
+                    className="form-select"
                     name="department"
-                    placeholder="Department"
                     required
-                  />
+                    defaultValue=""
+                  >
+                    <option value="">Select Department</option>
+                    {departments.map((department) => (
+                      <option key={department.value} value={department.value}>
+                        {department.label}
+                      </option>
+                    ))}
+                  </select>
                 </div>
-
-                <div className="col-md-12">
-                  <label htmlFor="contact-message" className="visually-hidden">
-                    Message
-                  </label>
-                  <textarea
-                    id="contact-message"
-                    className="form-control"
-                    name="message"
-                    rows={6}
-                    placeholder="Message"
-                    required
-                  ></textarea>
-                </div>
-                <div className="col-md-12 text-center">
-                  <button type="submit">Send Message</button>
-                </div>
+              </div>
+              <div className="form-group mt-3">
+                <label htmlFor={fieldId(simpleFieldIds, "message")} className="visually-hidden">
+                  Message
+                </label>
+                <textarea
+                  id={fieldId(simpleFieldIds, "message")}
+                  className="form-control"
+                  name="message"
+                  rows={6}
+                  placeholder="Message"
+                  required
+                ></textarea>
+              </div>
+              <div className="text-center">
+                <button type="submit">Send Message</button>
               </div>
             </MedilabForm>
           </div>

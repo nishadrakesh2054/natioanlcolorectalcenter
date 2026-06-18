@@ -8,7 +8,7 @@ import FaqSection from "@/components/sections/FaqSection";
 import TestimonialsSection from "@/components/sections/TestimonialsSection";
 import GallerySection from "@/components/sections/GallerySection";
 import ContactSection from "@/components/sections/ContactSection";
-import { getAppointmentDepartments, getAppointmentDoctors } from "@/lib/appointmentOptions";
+import { getAppointmentDepartments, getAppointmentDoctors, getContactDepartments } from "@/lib/appointmentOptions";
 import { publicPageSeo } from "@/lib/seo";
 import {
   fetchColorectalDiseases,
@@ -32,6 +32,7 @@ export default async function HomePage() {
     gallery,
     appointmentDepartments,
     appointmentDoctors,
+    contactDepartments,
   ] = await Promise.all([
     fetchServices(),
     fetchColorectalDiseases(),
@@ -41,6 +42,7 @@ export default async function HomePage() {
     fetchGalleryItems(),
     getAppointmentDepartments(),
     getAppointmentDoctors(),
+    getContactDepartments(),
   ]);
 
   return (
@@ -57,7 +59,7 @@ export default async function HomePage() {
       <FaqSection items={faqs} />
       <TestimonialsSection items={testimonials} />
       <GallerySection items={gallery} />
-      <ContactSection />
+      <ContactSection departments={contactDepartments} />
     </>
   );
 }

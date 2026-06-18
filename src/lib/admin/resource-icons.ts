@@ -7,4 +7,6 @@ export const ADMIN_RESOURCE_ICONS: Record<string, string> = {
   testimonials: "bi bi-chat-quote",
   blogs: "bi bi-journal-text",
   "case-studies": "bi bi-file-medical",
+  "contact-messages": "bi bi-envelope",
+  "appointment-requests": "bi bi-calendar-check",
 };

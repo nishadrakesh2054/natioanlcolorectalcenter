@@ -84,10 +84,10 @@ export default function AppointmentSection({
             </div>
             <div className="col-md-4 form-group mt-3">
               <label htmlFor="department" className="visually-hidden">
-                Department
+                Colorectal disease
               </label>
               <select name="department" id="department" className="form-select" required defaultValue="">
-                <option value="">Select Department</option>
+                <option value="">Select colorectal disease</option>
                 {departments.map((department) => (
                   <option key={department.value} value={department.value}>
                     {department.label}
@@ -97,10 +97,10 @@ export default function AppointmentSection({
             </div>
             <div className="col-md-4 form-group mt-3">
               <label htmlFor="doctor" className="visually-hidden">
-                Doctor
+                Specialist
               </label>
               <select name="doctor" id="doctor" className="form-select" required defaultValue="">
-                <option value="">Select Doctor</option>
+                <option value="">Select specialist doctor</option>
                 {doctors.map((doctor) => (
                   <option key={doctor.value} value={doctor.value}>
                     {doctor.label}

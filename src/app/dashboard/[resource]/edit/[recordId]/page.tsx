@@ -4,7 +4,7 @@ import ResourceForm from "@/components/admin/ResourceForm";
 import AdminShell from "@/components/admin/AdminShell";
 import { getRecord } from "@/lib/admin/queries";
 import { requireAdminUser } from "@/lib/admin/auth";
-import { getAdminResource, recordToFormValues } from "@/lib/admin/resources";
+import { getAdminResource, isInboxResource, recordToFormValues } from "@/lib/admin/resources";
 
 type EditResourcePageProps = {
   params: Promise<{ resource: string; recordId: string }>;
@@ -36,10 +36,16 @@ export default async function EditResourcePage({ params }: EditResourcePageProps
     notFound();
   }
 
+  const inbox = isInboxResource(resource);
+
   return (
     <AdminShell
-      title={`Edit ${resource.label}`}
-      subtitle="Update content and save to publish changes on the website"
+      title={inbox ? `View ${resource.label}` : `Edit ${resource.label}`}
+      subtitle={
+        inbox
+          ? "Read-only submission from the website contact or appointment form"
+          : "Update content and save to publish changes on the website"
+      }
     >
       <ResourceForm
         resource={resource}

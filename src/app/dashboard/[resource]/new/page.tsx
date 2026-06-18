@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import ResourceForm from "@/components/admin/ResourceForm";
 import AdminShell from "@/components/admin/AdminShell";
 import { requireAdminUser } from "@/lib/admin/auth";
-import { defaultFormValues, getAdminResource } from "@/lib/admin/resources";
+import { defaultFormValues, getAdminResource, isInboxResource } from "@/lib/admin/resources";
 
 type NewResourcePageProps = {
   params: Promise<{ resource: string }>;
@@ -23,7 +23,7 @@ export default async function NewResourcePage({ params }: NewResourcePageProps) 
   const { resource: slug } = await params;
   const resource = getAdminResource(slug);
 
-  if (!resource) {
+  if (!resource || isInboxResource(resource)) {
     notFound();
   }
 

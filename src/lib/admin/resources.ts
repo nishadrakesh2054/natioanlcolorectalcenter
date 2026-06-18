@@ -22,6 +22,7 @@ export type AdminFieldType =
   | "textarea"
   | "number"
   | "date"
+  | "datetime"
   | "boolean"
   | "image"
   | "lines"
@@ -31,6 +32,17 @@ export type AdminFieldType =
   | "disease-images"
   | "case-study-blocks"
   | "json";
+
+export type AdminResourceKind = "content" | "inbox";
+
+export type AdminResourceGroup =
+  | "care"
+  | "articles"
+  | "media"
+  | "site"
+  | "inbox";
+
+export type AdminListColumnType = "text" | "image" | "datetime";
 
 export type AdminField = {
   key: string;
@@ -47,10 +59,35 @@ export type AdminResource = {
   table: string;
   label: string;
   labelPlural: string;
-  listColumns: { key: string; label: string; type?: "text" | "image" }[];
+  kind?: AdminResourceKind;
+  group: AdminResourceGroup;
+  listColumns: { key: string; label: string; type?: AdminListColumnType }[];
   fields: AdminField[];
   orderBy?: { column: string; ascending?: boolean };
 };
+
+function formatDatetimeForAdmin(value: unknown): string {
+  if (value === null || value === undefined || value === "") {
+    return "";
+  }
+
+  const date = new Date(String(value));
+  if (Number.isNaN(date.getTime())) {
+    return String(value);
+  }
+
+  return date.toLocaleString("en-US", {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+    hour: "numeric",
+    minute: "2-digit",
+  });
+}
+
+export function isInboxResource(resource: AdminResource) {
+  return resource.kind === "inbox";
+}
 
 export const adminResources: AdminResource[] = [
   {
@@ -58,6 +95,7 @@ export const adminResources: AdminResource[] = [
     table: "services",
     label: "Service",
     labelPlural: "Services",
+    group: "care",
     orderBy: { column: "sort_order", ascending: true },
     listColumns: [
       { key: "id", label: "ID" },
@@ -80,6 +118,7 @@ export const adminResources: AdminResource[] = [
     table: "doctors",
     label: "Doctor",
     labelPlural: "Doctors",
+    group: "care",
     orderBy: { column: "sort_order", ascending: true },
     listColumns: [
       { key: "id", label: "ID" },
@@ -127,6 +166,7 @@ export const adminResources: AdminResource[] = [
     table: "colorectal_diseases",
     label: "Disease",
     labelPlural: "Colorectal Diseases",
+    group: "care",
     orderBy: { column: "sort_order", ascending: true },
     listColumns: [
       { key: "id", label: "ID" },
@@ -161,6 +201,7 @@ export const adminResources: AdminResource[] = [
     table: "faq_items",
     label: "FAQ",
     labelPlural: "FAQ",
+    group: "site",
     orderBy: { column: "sort_order", ascending: true },
     listColumns: [
       { key: "id", label: "ID" },
@@ -180,6 +221,7 @@ export const adminResources: AdminResource[] = [
     table: "gallery_items",
     label: "Gallery image",
     labelPlural: "Gallery",
+    group: "media",
     orderBy: { column: "sort_order", ascending: true },
     listColumns: [
       { key: "id", label: "ID" },
@@ -201,6 +243,7 @@ export const adminResources: AdminResource[] = [
     table: "testimonials",
     label: "Testimonial",
     labelPlural: "Testimonials",
+    group: "media",
     orderBy: { column: "sort_order", ascending: true },
     listColumns: [
       { key: "id", label: "ID" },
@@ -223,6 +266,7 @@ export const adminResources: AdminResource[] = [
     table: "blogs",
     label: "Blog post",
     labelPlural: "Blogs",
+    group: "articles",
     orderBy: { column: "published_at", ascending: false },
     listColumns: [
       { key: "id", label: "ID" },
@@ -255,6 +299,7 @@ export const adminResources: AdminResource[] = [
     table: "case_studies",
     label: "Case study",
     labelPlural: "Case Studies",
+    group: "articles",
     orderBy: { column: "published_at", ascending: false },
     listColumns: [
       { key: "id", label: "ID" },
@@ -288,6 +333,56 @@ export const adminResources: AdminResource[] = [
       { key: "canonical_path", label: "Canonical path", type: "text", required: true },
       { key: "sort_order", label: "Sort order", type: "number", required: true },
       { key: "is_active", label: "Active", type: "boolean" },
+    ],
+  },
+  {
+    slug: "contact-messages",
+    table: "contact_messages",
+    label: "Contact message",
+    labelPlural: "Contact Messages",
+    kind: "inbox",
+    group: "inbox",
+    orderBy: { column: "created_at", ascending: false },
+    listColumns: [
+      { key: "created_at", label: "Received", type: "datetime" },
+      { key: "name", label: "Name" },
+      { key: "email", label: "Email" },
+      { key: "phone", label: "Phone" },
+      { key: "department", label: "Department" },
+    ],
+    fields: [
+      { key: "created_at", label: "Received", type: "datetime" },
+      { key: "name", label: "Name", type: "text" },
+      { key: "email", label: "Email", type: "text" },
+      { key: "phone", label: "Phone", type: "text" },
+      { key: "department", label: "Department", type: "text" },
+      { key: "message", label: "Message", type: "textarea", rows: 8 },
+    ],
+  },
+  {
+    slug: "appointment-requests",
+    table: "appointment_requests",
+    label: "Appointment request",
+    labelPlural: "Appointment Requests",
+    kind: "inbox",
+    group: "inbox",
+    orderBy: { column: "created_at", ascending: false },
+    listColumns: [
+      { key: "created_at", label: "Submitted", type: "datetime" },
+      { key: "appointment_at", label: "Appointment", type: "datetime" },
+      { key: "name", label: "Name" },
+      { key: "department", label: "Department" },
+      { key: "doctor", label: "Doctor" },
+    ],
+    fields: [
+      { key: "created_at", label: "Submitted", type: "datetime" },
+      { key: "appointment_at", label: "Preferred date & time", type: "datetime" },
+      { key: "name", label: "Name", type: "text" },
+      { key: "email", label: "Email", type: "text" },
+      { key: "phone", label: "Phone", type: "text" },
+      { key: "department", label: "Department", type: "text" },
+      { key: "doctor", label: "Doctor", type: "text" },
+      { key: "message", label: "Message", type: "textarea", rows: 6 },
     ],
   },
 ];
@@ -334,6 +429,8 @@ export function recordToFormValues(
       values[field.key] = raw ? JSON.stringify(raw, null, 2) : "";
     } else if (field.type === "boolean") {
       values[field.key] = raw === false ? "false" : "true";
+    } else if (field.type === "datetime") {
+      values[field.key] = formatDatetimeForAdmin(raw);
     } else if (raw === null || raw === undefined) {
       values[field.key] = "";
     } else {

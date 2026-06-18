@@ -4,7 +4,7 @@ import AdminDataTable from "@/components/admin/AdminDataTable";
 import AdminShell from "@/components/admin/AdminShell";
 import { listRecords } from "@/lib/admin/queries";
 import { requireAdminUser } from "@/lib/admin/auth";
-import { getAdminResource } from "@/lib/admin/resources";
+import { getAdminResource, isInboxResource } from "@/lib/admin/resources";
 
 type ResourcePageProps = {
   params: Promise<{ resource: string }>;
@@ -31,9 +31,17 @@ export default async function ResourceListPage({ params }: ResourcePageProps) {
   }
 
   const rows = await listRecords(slug);
+  const inbox = isInboxResource(resource);
 
   return (
-    <AdminShell title={resource.labelPlural} subtitle={`Manage ${resource.label.toLowerCase()} content`}>
+    <AdminShell
+      title={resource.labelPlural}
+      subtitle={
+        inbox
+          ? "Form submissions from the public website"
+          : `Manage ${resource.label.toLowerCase()} content`
+      }
+    >
       <AdminDataTable resource={resource} rows={rows} />
     </AdminShell>
   );

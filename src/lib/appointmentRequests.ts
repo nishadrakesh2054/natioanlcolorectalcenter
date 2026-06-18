@@ -1,6 +1,7 @@
 import {
   getAppointmentDepartments,
   getAppointmentDoctors,
+  getOptionLabel,
 } from "@/lib/appointmentOptions";
 import { createClient } from "@/utils/supabase/client";
 
@@ -13,13 +14,6 @@ export type AppointmentRequestInput = {
   doctor: string;
   message: string | null;
 };
-
-function getOptionLabel(
-  options: { value: string; label: string }[],
-  value: string
-) {
-  return options.find((option) => option.value === value)?.label ?? value;
-}
 
 async function parseAppointmentForm(
   formData: FormData

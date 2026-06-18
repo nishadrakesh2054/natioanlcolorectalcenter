@@ -2,12 +2,27 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { adminResources } from "@/lib/admin/resources";
-import { ADMIN_RESOURCE_ICONS } from "@/lib/admin/resource-icons";
 import { signOut } from "@/lib/admin/actions";
+import { getGroupedAdminResources } from "@/lib/admin/nav-groups";
+import { ADMIN_RESOURCE_ICONS } from "@/lib/admin/resource-icons";
+import type { AdminResource } from "@/lib/admin/resources";
 
 export default function AdminSidebar() {
   const pathname = usePathname();
+  const navGroups = getGroupedAdminResources();
+
+  function renderNavLink(resource: AdminResource) {
+    const href = `/dashboard/${resource.slug}`;
+    const active = pathname === href || pathname.startsWith(`${href}/`);
+    const icon = ADMIN_RESOURCE_ICONS[resource.slug] ?? "bi bi-folder2-open";
+
+    return (
+      <Link key={resource.slug} href={href} className={active ? "active" : ""}>
+        <i className={icon} aria-hidden="true"></i>
+        {resource.labelPlural}
+      </Link>
+    );
+  }
 
   return (
     <aside className="admin-sidebar">
@@ -26,18 +41,12 @@ export default function AdminSidebar() {
           <i className="bi bi-grid-1x2-fill" aria-hidden="true"></i>
           Overview
         </Link>
-        {adminResources.map((resource) => {
-          const href = `/dashboard/${resource.slug}`;
-          const active = pathname === href || pathname.startsWith(`${href}/`);
-          const icon = ADMIN_RESOURCE_ICONS[resource.slug] ?? "bi bi-folder2-open";
-
-          return (
-            <Link key={resource.slug} href={href} className={active ? "active" : ""}>
-              <i className={icon} aria-hidden="true"></i>
-              {resource.labelPlural}
-            </Link>
-          );
-        })}
+        {navGroups.map((group) => (
+          <div key={group.id} className="admin-nav-group">
+            <div className="admin-nav-section-label">{group.label}</div>
+            {group.resources.map(renderNavLink)}
+          </div>
+        ))}
       </nav>
 
       <div className="admin-sidebar-footer">

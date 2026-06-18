@@ -1,10 +1,34 @@
 import Link from "next/link";
 import DeleteButton from "@/components/admin/DeleteButton";
 import type { AdminResource } from "@/lib/admin/resources";
+import { isInboxResource } from "@/lib/admin/resources";
 
 type ListColumn = AdminResource["listColumns"][number];
 
+function formatDatetime(value: unknown): string {
+  if (value === null || value === undefined || value === "") {
+    return "—";
+  }
+
+  const date = new Date(String(value));
+  if (Number.isNaN(date.getTime())) {
+    return String(value);
+  }
+
+  return date.toLocaleString("en-US", {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+    hour: "numeric",
+    minute: "2-digit",
+  });
+}
+
 function formatCell(value: unknown, column: ListColumn): React.ReactNode {
+  if (column.type === "datetime") {
+    return formatDatetime(value);
+  }
+
   if (column.type === "image") {
     const src = typeof value === "string" ? value.trim() : "";
     if (!src) {
@@ -44,6 +68,8 @@ export default function AdminDataTable({
   resource: AdminResource;
   rows: Record<string, unknown>[];
 }) {
+  const inbox = isInboxResource(resource);
+
   return (
     <div className="admin-card">
       <div className="admin-card-header">
@@ -51,10 +77,12 @@ export default function AdminDataTable({
           <h2 className="h6 mb-0">{resource.labelPlural}</h2>
           <p className="small text-muted mb-0">{rows.length} records</p>
         </div>
-        <Link href={`/dashboard/${resource.slug}/new`} className="admin-btn-primary">
-          <i className="bi bi-plus-lg"></i>
-          Add {resource.label}
-        </Link>
+        {!inbox ? (
+          <Link href={`/dashboard/${resource.slug}/new`} className="admin-btn-primary">
+            <i className="bi bi-plus-lg"></i>
+            Add {resource.label}
+          </Link>
+        ) : null}
       </div>
 
       <div className="admin-card-body table-responsive">
@@ -71,14 +99,15 @@ export default function AdminDataTable({
             {rows.length === 0 ? (
               <tr>
                 <td colSpan={resource.listColumns.length + 1} className="text-center text-muted py-4">
-                  No records yet. Click the + button to add one.
+                  {inbox
+                    ? "No submissions yet. Messages from the website will appear here."
+                    : "No records yet. Click the + button to add one."}
                 </td>
               </tr>
             ) : (
               rows.map((row) => {
                 const recordId = String(row.id);
-                const title =
-                  String(row.title ?? row.name ?? row.question ?? row.alt ?? recordId);
+                const title = String(row.name ?? row.title ?? row.question ?? row.alt ?? recordId);
 
                 return (
                   <tr key={recordId}>
@@ -90,9 +119,9 @@ export default function AdminDataTable({
                         <Link
                           href={`/dashboard/${resource.slug}/edit/${recordId}`}
                           className="admin-icon-btn"
-                          title={`Edit ${title}`}
+                          title={inbox ? `View ${title}` : `Edit ${title}`}
                         >
-                          <i className="bi bi-pencil"></i>
+                          <i className={inbox ? "bi bi-eye" : "bi bi-pencil"}></i>
                         </Link>
                         <DeleteButton
                           resourceSlug={resource.slug}
