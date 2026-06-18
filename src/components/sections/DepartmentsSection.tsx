@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useLayoutEffect, useRef, useState } from "react";
-import SiteImage from "@/components/ui/SiteImage";
+import DiseaseImageGallery from "@/components/ui/DiseaseImageGallery";
 import type { ColorectalDisease } from "@/lib/types/colorectal-disease";
 
 type DepartmentsSectionProps = {
@@ -140,16 +140,13 @@ export default function DepartmentsSection({ diseases }: DepartmentsSectionProps
                 </p>
               </div>
 
-              <div ref={galleryRef} className="colorectal-disease-gallery colorectal-disease-gallery-single">
-                {activeDisease.image && (
-                  <SiteImage
-                    src={activeDisease.image}
-                    alt={`${activeDisease.title.trim()} illustration`}
-                    width={480}
-                    height={360}
-                    fluid
-                  />
-                )}
+              <div ref={galleryRef}>
+                <DiseaseImageGallery
+                  className="colorectal-disease-gallery"
+                  image={activeDisease.image}
+                  images={activeDisease.images}
+                  title={activeDisease.title}
+                />
               </div>
 
               <div ref={actionsRef} className="colorectal-disease-panel-actions">

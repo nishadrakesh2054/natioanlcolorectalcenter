@@ -53,6 +53,7 @@ type DiseaseRow = {
   title: string;
   category: string;
   image: string;
+  images: string[] | null;
   description: string;
   content: ColorectalDisease["content"];
   sort_order: number;
@@ -242,11 +243,17 @@ function mapDoctor(row: DoctorRow): Doctor {
 }
 
 function mapDisease(row: DiseaseRow): ColorectalDisease {
+  const images = Array.isArray(row.images)
+    ? row.images.map((src) => String(src).trim()).filter(Boolean)
+    : [];
+  const image = images[0] ?? row.image ?? "";
+
   return {
     id: row.id,
     title: row.title,
     category: row.category,
-    image: row.image,
+    image,
+    images: images.length ? images : image ? [image] : [],
     description: row.description,
     content: row.content ?? [],
   };

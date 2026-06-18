@@ -55,10 +55,12 @@ export default function ImageUploadField({
 
   return (
     <div className="admin-image-upload">
-      <label className="form-label" htmlFor={name}>
-        {label}
-        {required ? " *" : ""}
-      </label>
+      {label ? (
+        <label className="form-label" htmlFor={name}>
+          {label}
+          {required ? " *" : ""}
+        </label>
+      ) : null}
 
       {value ? (
         // eslint-disable-next-line @next/next/no-img-element

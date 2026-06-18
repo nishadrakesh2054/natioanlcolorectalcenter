@@ -3,6 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 import CaseStudyBlocksField from "@/components/admin/CaseStudyBlocksField";
+import DiseaseImagesField from "@/components/admin/DiseaseImagesField";
 import DiseaseContentField from "@/components/admin/DiseaseContentField";
 import ImageUploadField from "@/components/admin/ImageUploadField";
 import SocialLinksField from "@/components/admin/SocialLinksField";
@@ -43,6 +44,17 @@ function FieldInput({
   if (field.type === "disease-content") {
     return (
       <DiseaseContentField
+        label={field.label}
+        value={value}
+        onChange={onChange}
+        hint={field.hint}
+      />
+    );
+  }
+
+  if (field.type === "disease-images") {
+    return (
+      <DiseaseImagesField
         label={field.label}
         value={value}
         onChange={onChange}

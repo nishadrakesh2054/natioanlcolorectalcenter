@@ -1,7 +1,7 @@
 import Link from "next/link";
 import SocialLinks from "@/components/layout/SocialLinks";
 import DiseaseDetailContent from "@/components/sections/DiseaseDetailContent";
-import SiteImage from "@/components/ui/SiteImage";
+import DiseaseImageGallery from "@/components/ui/DiseaseImageGallery";
 import type { ColorectalDisease } from "@/lib/types/colorectal-disease";
 
 type DiseaseDetailSectionProps = {
@@ -16,9 +16,12 @@ export default function DiseaseDetailSection({ disease }: DiseaseDetailSectionPr
           <div className="col-lg-4" data-aos="fade-up">
             <aside className="service-detail-sidebar">
               <div className="service-detail-hero">
-                <div className="disease-detail-photo">
-                  <SiteImage src={disease.image} alt={disease.title.trim()} width={320} height={320} fluid />
-                </div>
+                <DiseaseImageGallery
+                  className="disease-detail-gallery"
+                  image={disease.image}
+                  images={disease.images}
+                  title={disease.title}
+                />
                 <span className="service-detail-label">Colorectal Disease</span>
                 <h3>{disease.title.trim()}</h3>
                 <p>{disease.description}</p>

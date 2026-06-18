@@ -276,3 +276,60 @@ export function parseCaseStudyBlocksForm(value: string): CaseStudyBlocksForm {
 export function serializeCaseStudyBlocksForm(form: CaseStudyBlocksForm) {
   return JSON.stringify(form);
 }
+
+export const DISEASE_IMAGE_SLOT_COUNT = 4;
+
+export type DiseaseImagesForm = {
+  slots: [string, string, string, string];
+};
+
+export function emptyDiseaseImagesFormValue() {
+  return JSON.stringify({ slots: ["", "", "", ""] } satisfies DiseaseImagesForm);
+}
+
+function normalizeImageSlots(value: unknown): [string, string, string, string] {
+  const slots: string[] = [];
+
+  if (Array.isArray(value)) {
+    slots.push(...value.map((entry) => String(entry).trim()).filter(Boolean));
+  } else if (typeof value === "string" && value.trim()) {
+    slots.push(value.trim());
+  }
+
+  return [
+    slots[0] ?? "",
+    slots[1] ?? "",
+    slots[2] ?? "",
+    slots[3] ?? "",
+  ];
+}
+
+export function diseaseImagesToFormValue(value: unknown, fallbackImage?: unknown): string {
+  let slots = normalizeImageSlots(value);
+
+  if (!slots.some(Boolean) && fallbackImage !== undefined && fallbackImage !== null) {
+    slots = normalizeImageSlots(fallbackImage);
+  }
+
+  return JSON.stringify({ slots } satisfies DiseaseImagesForm);
+}
+
+export function parseDiseaseImagesForm(value: string): DiseaseImagesForm {
+  try {
+    const parsed = JSON.parse(value || "{}") as DiseaseImagesForm;
+    if (Array.isArray(parsed.slots)) {
+      return {
+        slots: normalizeImageSlots(parsed.slots),
+      };
+    }
+  } catch {
+    // fall through
+  }
+
+  return { slots: ["", "", "", ""] };
+}
+
+export function formValueToDiseaseImages(value: string): string[] {
+  const { slots } = parseDiseaseImagesForm(value);
+  return slots.map((slot) => slot.trim()).filter(Boolean);
+}

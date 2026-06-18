@@ -2,11 +2,14 @@ import {
   arrayToLines,
   caseStudyBlocksToFormValue,
   diseaseContentToFormValue,
+  diseaseImagesToFormValue,
   emptyCaseStudyBlocksFormValue,
   emptyDiseaseContentFormValue,
+  emptyDiseaseImagesFormValue,
   emptySocialLinksFormValue,
   formValueToCaseStudyBlocks,
   formValueToDiseaseContent,
+  formValueToDiseaseImages,
   formValueToSocialLinks,
   linesToArray,
   linesToTitledList,
@@ -25,6 +28,7 @@ export type AdminFieldType =
   | "title-lines"
   | "social-links"
   | "disease-content"
+  | "disease-images"
   | "case-study-blocks"
   | "json";
 
@@ -126,6 +130,7 @@ export const adminResources: AdminResource[] = [
     orderBy: { column: "sort_order", ascending: true },
     listColumns: [
       { key: "id", label: "ID" },
+      { key: "image", label: "Photo", type: "image" },
       { key: "title", label: "Title" },
       { key: "category", label: "Category" },
       { key: "sort_order", label: "Order" },
@@ -133,7 +138,13 @@ export const adminResources: AdminResource[] = [
     fields: [
       { key: "title", label: "Title", type: "text", required: true },
       { key: "category", label: "Category", type: "text", required: true },
-      { key: "image", label: "Image", type: "image", required: true },
+      {
+        key: "images",
+        label: "Disease images (4)",
+        type: "disease-images",
+        required: true,
+        hint: "Upload up to 4 images. Use “Upload multiple” or set each slot. Image 1 is required.",
+      },
       { key: "description", label: "Description", type: "textarea", required: true, rows: 4 },
       {
         key: "content",
@@ -315,6 +326,8 @@ export function recordToFormValues(
       values[field.key] = socialLinksToFormValue(raw);
     } else if (field.type === "disease-content") {
       values[field.key] = diseaseContentToFormValue(raw);
+    } else if (field.type === "disease-images") {
+      values[field.key] = diseaseImagesToFormValue(raw, record.image);
     } else if (field.type === "case-study-blocks") {
       values[field.key] = caseStudyBlocksToFormValue(raw);
     } else if (field.type === "json") {
@@ -348,6 +361,10 @@ export function formValuesToRecord(
       record[field.key] = formValueToSocialLinks(raw);
     } else if (field.type === "disease-content") {
       record[field.key] = formValueToDiseaseContent(raw);
+    } else if (field.type === "disease-images") {
+      const images = formValueToDiseaseImages(raw);
+      record.images = images;
+      record.image = images[0] ?? "";
     } else if (field.type === "case-study-blocks") {
       record[field.key] = formValueToCaseStudyBlocks(raw);
     } else if (field.type === "json") {
@@ -386,6 +403,8 @@ export function defaultFormValues(resource: AdminResource): Record<string, strin
       values[field.key] = emptySocialLinksFormValue();
     } else if (field.type === "disease-content") {
       values[field.key] = emptyDiseaseContentFormValue();
+    } else if (field.type === "disease-images") {
+      values[field.key] = emptyDiseaseImagesFormValue();
     } else if (field.key === "author") {
       values[field.key] = "NCRC Medical Team";
     } else if (field.key === "read_time") {

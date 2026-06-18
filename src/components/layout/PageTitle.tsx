@@ -11,8 +11,10 @@ export default function PageTitle({ title, breadcrumbs }: PageTitleProps) {
   return (
     <section className="page-hero section">
       <div className="container" data-aos="fade-up">
-        <Breadcrumbs items={trail} />
-        <h1 className="page-hero-title">{title}</h1>
+        <div className="page-hero-intro">
+          <Breadcrumbs items={trail} />
+          <h1 className="page-hero-title">{title}</h1>
+        </div>
       </div>
     </section>
   );
