@@ -571,6 +571,16 @@
 }
 
 @media (max-width: 767px) {
+  #header.header .topbar {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+
+  #header.header .topbar > .container {
+    padding-left: 0;
+    padding-right: 0;
+  }
+
   #header.header .branding {
     min-height: auto !important;
     padding: 6px 0 !important;

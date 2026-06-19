@@ -224,17 +224,19 @@ h6 {
 --------------------------------------------------------------*/
 .header {
   color: var(--default-color);
-  transition: all 0.5s;
+  transition: box-shadow 0.3s ease;
   z-index: 997;
   background-color: var(--background-color);
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
 }
 
 .header .topbar {
   background-color: var(--accent-color);
   height: 40px;
-  padding: 0;
+  padding-block: 0;
   font-size: 14px;
-  transition: all 0.5s;
+  transition: opacity 0.25s ease, visibility 0.25s ease;
 }
 
 .header .topbar .contact-info i {
@@ -347,8 +349,11 @@ h6 {
 
 .scrolled .header .topbar {
   height: 0;
+  min-height: 0;
+  opacity: 0;
   visibility: hidden;
   overflow: hidden;
+  pointer-events: none;
 }
 
 /*--------------------------------------------------------------

@@ -45,7 +45,13 @@ function initCoreUi() {
   const mobileNavToggleBtn = document.querySelector(".mobile-nav-toggle");
   const scrollTop = document.querySelector(".scroll-top");
 
-  const toggleScrolled = () => {
+  const SCROLL_DOWN_THRESHOLD = 100;
+  const SCROLL_UP_THRESHOLD = 20;
+  let scrollTicking = false;
+
+  const applyScrollState = () => {
+    scrollTicking = false;
+
     if (
       !selectHeader ||
       !selectBody ||
@@ -55,9 +61,30 @@ function initCoreUi() {
     ) {
       return;
     }
-    window.scrollY > 100
-      ? selectBody.classList.add("scrolled")
-      : selectBody.classList.remove("scrolled");
+
+    const scrollY = window.scrollY;
+    const isScrolled = selectBody.classList.contains("scrolled");
+
+    if (!isScrolled && scrollY > SCROLL_DOWN_THRESHOLD) {
+      selectBody.classList.add("scrolled");
+    } else if (isScrolled && scrollY < SCROLL_UP_THRESHOLD) {
+      selectBody.classList.remove("scrolled");
+    }
+
+    if (scrollTop) {
+      if (scrollY > SCROLL_DOWN_THRESHOLD) {
+        scrollTop.classList.add("active");
+      } else {
+        scrollTop.classList.remove("active");
+      }
+    }
+  };
+
+  const onScroll = () => {
+    if (!scrollTicking) {
+      scrollTicking = true;
+      requestAnimationFrame(applyScrollState);
+    }
   };
 
   const syncMobileNavState = () => {
@@ -73,21 +100,13 @@ function initCoreUi() {
     syncMobileNavState();
   };
 
-  const toggleScrollTop = () => {
-    if (scrollTop) {
-      window.scrollY > 100
-        ? scrollTop.classList.add("active")
-        : scrollTop.classList.remove("active");
-    }
-  };
-
   const onScrollTopClick = (e: Event) => {
     e.preventDefault();
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  toggleScrolled();
-  document.addEventListener("scroll", toggleScrolled, { passive: true });
+  applyScrollState();
+  document.addEventListener("scroll", onScroll, { passive: true });
 
   mobileNavToggleBtn?.addEventListener("click", mobileNavToogle);
   syncMobileNavState();
@@ -114,8 +133,6 @@ function initCoreUi() {
   });
 
   scrollTop?.addEventListener("click", onScrollTopClick);
-  document.addEventListener("scroll", toggleScrollTop, { passive: true });
-  toggleScrollTop();
 
   initFaqAccordion();
 }

@@ -48,13 +48,11 @@ export default function HeroSection() {
                 <span className="hero-brand-line">{siteContact.name}</span>
               </div>
 
-              <h1 className="hero-heading">
+              <h1 className="hero-heading pb-3">
                 Expert colorectal care you can trust.
               </h1>
 
-              <p className="hero-lead">
-                We listen first—then guide you with clear answers and personalized treatment.
-              </p>
+            
 
               <div className="hero-journey" aria-label="Patient care journey">
                 {careJourney.map((step, index) => (
@@ -79,9 +77,7 @@ export default function HeroSection() {
                 <Link href="/appointment" className="hero-btn hero-btn-primary">
                   Book Appointment
                 </Link>
-                <Link href="/departments" className="hero-btn hero-btn-ghost">
-                  View conditions
-                </Link>
+              
               </div>
             </div>
           </div>
