@@ -18,7 +18,7 @@ export default function AboutSection() {
                   <SiteImage
                     src="/assets/img/about1.png"
                     className="about-media-img"
-                    alt="National Colorectal Center team at Everest Hospital, Kathmandu"
+                    alt="National Colorectal Center team in Tinkune, Kathmandu"
                     width={640}
                     height={480}
                     fluid
@@ -51,11 +51,11 @@ export default function AboutSection() {
               <span className="about-label">Who We Are</span>
               <h2 className="about-heading">Leading Colorectal Care in Nepal</h2>
               <p>
-                The <strong className="text-danger">National Colorectal Center (NCRC)</strong> at
-                Everest Hospital, New Baneshwor, is Nepal&apos;s first dedicated center for colon,
-                rectum, and anorectal care. Our colorectal surgeons provide colonoscopy, cancer
-                screening, piles and fistula treatment, and advanced surgery—with clear guidance
-                from diagnosis through recovery, for patients across Kathmandu and Nepal.
+                The <strong className="text-danger">National Colorectal Center (NCRC)</strong> in
+                Tinkune, Kathmandu, is Nepal&apos;s dedicated center for colon, rectum, and anorectal
+                care. Our colorectal surgeons provide colonoscopy, cancer screening, piles and
+                fistula treatment, and advanced surgery—with clear guidance from diagnosis through
+                recovery, for patients across Kathmandu and Nepal.
               </p>
               <ul className="about-features">
                 <li>

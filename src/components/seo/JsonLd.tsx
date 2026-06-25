@@ -23,19 +23,63 @@ export function organizationJsonLd() {
     alternateName: siteContact.shortName,
     url: getSiteUrl(),
     logo: absoluteUrl(siteContact.logo),
-    image: absoluteUrl("/assets/img/hero-bg.jpg"),
+    image: absoluteUrl("/assets/img/banner.jpg"),
     email: siteContact.email,
     telephone: siteContact.phones.telRakesh,
     address: {
       "@type": "PostalAddress",
       streetAddress: siteContact.address.line1,
-      addressLocality: siteContact.address.line2,
+      addressLocality: "Kathmandu",
+      postalCode: "44600",
       addressCountry: "NP",
     },
-    sameAs: [siteContact.social.facebook, siteContact.social.whatsapp].filter(Boolean),
+    geo: {
+      "@type": "GeoCoordinates",
+      latitude: 27.6864,
+      longitude: 85.3482,
+    },
+    hasMap: siteContact.mapDirectionsUrl,
+    sameAs: [
+      siteContact.social.facebook,
+      siteContact.social.whatsapp,
+      siteContact.social.instagram,
+      siteContact.social.tiktok,
+    ].filter(Boolean),
     medicalSpecialty: "Colorectal Surgery",
     description:
       "Nepal's dedicated National Colorectal Center for screening, diagnosis, treatment, and follow-up of colorectal conditions.",
+  };
+}
+
+export function localBusinessJsonLd() {
+  return {
+    "@context": "https://schema.org",
+    "@type": "MedicalClinic",
+    "@id": `${getSiteUrl()}/#localbusiness`,
+    name: siteContact.name,
+    url: getSiteUrl(),
+    image: absoluteUrl("/assets/img/banner.jpg"),
+    telephone: siteContact.phones.telRakesh,
+    email: siteContact.email,
+    priceRange: "$$",
+    address: {
+      "@type": "PostalAddress",
+      streetAddress: siteContact.address.line1,
+      addressLocality: "Kathmandu",
+      postalCode: "44600",
+      addressCountry: "NP",
+    },
+    geo: {
+      "@type": "GeoCoordinates",
+      latitude: 27.6864,
+      longitude: 85.3482,
+    },
+    hasMap: siteContact.mapDirectionsUrl,
+    parentOrganization: { "@id": `${getSiteUrl()}/#organization` },
+    areaServed: {
+      "@type": "Country",
+      name: "Nepal",
+    },
   };
 }
 

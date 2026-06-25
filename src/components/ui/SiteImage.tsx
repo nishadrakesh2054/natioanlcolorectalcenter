@@ -7,6 +7,8 @@ type SiteImageProps = Omit<ImageProps, "src"> & {
   autoSize?: boolean;
 };
 
+const DEFAULT_SIZES = "(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw";
+
 export default function SiteImage({
   src,
   alt,
@@ -19,8 +21,10 @@ export default function SiteImage({
   style,
   sizes,
   quality = 80,
+  loading,
   ...rest
 }: SiteImageProps) {
+  const isPriority = rest.priority === true;
   const sizedStyle = fluid
     ? { width: "100%", height: "auto", ...style }
     : autoSize
@@ -37,6 +41,7 @@ export default function SiteImage({
         style={sizedStyle}
         sizes={sizes ?? "100vw"}
         quality={quality}
+        loading={loading ?? (isPriority ? undefined : "lazy")}
         {...rest}
       />
     );
@@ -50,8 +55,9 @@ export default function SiteImage({
       height={height ?? 480}
       className={className}
       style={sizedStyle}
-      sizes={sizes ?? "(max-width: 768px) 100vw, 640px"}
+      sizes={sizes ?? DEFAULT_SIZES}
       quality={quality}
+      loading={loading ?? (isPriority ? undefined : "lazy")}
       {...rest}
     />
   );

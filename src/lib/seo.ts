@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { siteContact } from "@/lib/siteContact";
 
 const DEFAULT_DESCRIPTION =
-  "Expert colorectal care at Nepal's National Colorectal Center (NCRC), Everest Hospital, New Baneshwor. Screenings, diagnostics, surgery, and follow-up.";
+  "Expert colorectal care at Nepal's National Colorectal Center (NCRC), Tinkune, Kathmandu. Screenings, diagnostics, surgery, and follow-up.";
 
 const DEFAULT_KEYWORDS = [
   "colorectal center Nepal",
@@ -73,7 +73,7 @@ export function createPageMetadata({
       description,
       url: absoluteUrl(path),
       siteName: siteContact.name,
-      locale: "en_US",
+      locale: "en_NP",
       images: [
         {
           url: ogImage,
@@ -116,17 +116,17 @@ export const siteMetadata: Metadata = {
   },
   openGraph: {
     type: "website",
-    locale: "en_US",
+    locale: "en_NP",
     siteName: siteContact.name,
     title: "National Colorectal Center | NCRC Nepal",
     description: DEFAULT_DESCRIPTION,
-    images: [{ url: "/assets/img/logo.png", alt: siteContact.name }],
+    images: [{ url: "/assets/img/banner.jpg", alt: siteContact.name }],
   },
   twitter: {
     card: "summary_large_image",
     title: "National Colorectal Center | NCRC Nepal",
     description: DEFAULT_DESCRIPTION,
-    images: ["/assets/img/logo.png"],
+    images: ["/assets/img/banner.jpg"],
   },
   robots: {
     index: true,
@@ -146,17 +146,17 @@ export const publicPageSeo = {
     title: "National Colorectal Center | NCRC Nepal",
     description: DEFAULT_DESCRIPTION,
     path: "/",
-    image: "/assets/img/hero-bg.jpg",
+    image: "/assets/img/banner.jpg",
   }),
   about: createPageMetadata({
     title: "About Us",
     description:
-      "NCRC is Nepal's first dedicated colorectal center offering screenings, diagnostics, surgical care, and ongoing management of colorectal diseases.",
+      "NCRC is Nepal's dedicated colorectal center in Tinkune, Kathmandu — screenings, diagnostics, surgical care, and follow-up for colorectal diseases.",
     path: "/about",
     keywords: [
       "about NCRC",
       "colorectal care Nepal",
-      "Everest Hospital Baneshwor",
+      "colorectal center Tinkune Kathmandu",
       "colorectal specialists Nepal",
     ],
   }),
@@ -196,7 +196,7 @@ export const publicPageSeo = {
   }),
   gallery: createPageMetadata({
     title: "Gallery",
-    description: "Photos from the National Colorectal Center (NCRC) at Everest Hospital, Baneshwor.",
+    description: "Photos from the National Colorectal Center (NCRC) in Tinkune, Kathmandu.",
     path: "/gallery",
   }),
   testimonials: createPageMetadata({

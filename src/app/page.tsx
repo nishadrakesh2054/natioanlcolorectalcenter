@@ -8,7 +8,7 @@ import FaqSection from "@/components/sections/FaqSection";
 import TestimonialsSection from "@/components/sections/TestimonialsSection";
 import GallerySection from "@/components/sections/GallerySection";
 import ContactSection from "@/components/sections/ContactSection";
-import { getAppointmentDepartments, getAppointmentDoctors, getContactDepartments } from "@/lib/appointmentOptions";
+import { getContactDepartments } from "@/lib/appointmentOptions";
 import { publicPageSeo } from "@/lib/seo";
 import {
   fetchColorectalDiseases,
@@ -40,8 +40,6 @@ export default async function HomePage() {
     fetchFaqs(),
     fetchTestimonials(),
     fetchGalleryItems(),
-    getAppointmentDepartments(),
-    getAppointmentDoctors(),
     getContactDepartments(),
   ]);
 

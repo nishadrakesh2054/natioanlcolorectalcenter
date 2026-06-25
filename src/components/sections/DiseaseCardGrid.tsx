@@ -33,13 +33,14 @@ export default function DiseaseCardGrid({
               key={disease.id}
             >
               <article className="disease-card h-100">
-                <div className="disease-card-media">
+                <Link href={href} className="disease-card-media" aria-label={`View ${title}`}>
                   {coverImage ? (
                     <SiteImage
                       src={coverImage}
                       alt={title}
                       width={480}
                       height={280}
+                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                       fluid
                     />
                   ) : (
@@ -50,7 +51,7 @@ export default function DiseaseCardGrid({
                   {disease.category.trim() && (
                     <span className="disease-card-category">{disease.category.trim()}</span>
                   )}
-                </div>
+                </Link>
 
                 <div className="disease-card-body">
                   <h3>

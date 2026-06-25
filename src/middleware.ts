@@ -1,10 +1,18 @@
-import { type NextRequest } from "next/server";
+import { type NextRequest, NextResponse } from "next/server";
 import { updateSession } from "@/utils/supabase/middleware";
 
 export async function middleware(request: NextRequest) {
-  return updateSession(request);
+  const { pathname } = request.nextUrl;
+
+  const response =
+    pathname.startsWith("/dashboard") || pathname === "/login"
+      ? await updateSession(request)
+      : NextResponse.next({ request });
+
+  response.headers.set("x-pathname", pathname);
+  return response;
 }
 
 export const config = {
-  matcher: ["/dashboard/:path*", "/login"],
+  matcher: ["/((?!_next/static|_next/image|favicon.ico|assets/).*)"],
 };

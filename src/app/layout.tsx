@@ -1,17 +1,18 @@
 import type { Metadata, Viewport } from "next";
-import { Roboto, Poppins, Raleway } from "next/font/google";
+import { headers } from "next/headers";
+import { Roboto, Poppins } from "next/font/google";
 import SiteChrome from "@/components/layout/SiteChrome";
-import { JsonLd, organizationJsonLd, websiteJsonLd } from "@/components/seo/JsonLd";
+import { JsonLd, localBusinessJsonLd, organizationJsonLd, websiteJsonLd } from "@/components/seo/JsonLd";
 import RouteAssets from "@/components/RouteAssets";
+import { getPublicNav } from "@/lib/public-nav";
+import { isAdminRoute } from "@/lib/routeAssets";
 import { siteMetadata } from "@/lib/seo";
-import { getDoctorSpecialties } from "@/lib/doctor-specialty";
-import { fetchColorectalDiseases, fetchDoctors } from "@/lib/supabase/fetch-content";
-import { toDiseaseNavItems } from "@/lib/types/disease-nav";
+import { getSupabaseHostname } from "@/lib/supabase-host";
 import "./globals.css";
 
 const roboto = Roboto({
   subsets: ["latin"],
-  weight: ["400", "500", "700"],
+  weight: ["400", "700"],
   variable: "--font-roboto",
   display: "swap",
   preload: true,
@@ -19,16 +20,8 @@ const roboto = Roboto({
 
 const poppins = Poppins({
   subsets: ["latin"],
-  weight: ["500", "600", "700", "800"],
+  weight: ["600", "700"],
   variable: "--font-poppins",
-  display: "swap",
-  preload: false,
-});
-
-const raleway = Raleway({
-  subsets: ["latin"],
-  weight: ["500", "600", "700"],
-  variable: "--font-raleway",
   display: "swap",
   preload: false,
 });
@@ -46,21 +39,35 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const [diseases, doctors] = await Promise.all([fetchColorectalDiseases(), fetchDoctors()]);
-  const diseaseNav = toDiseaseNavItems(diseases);
-  const specialtyNav = getDoctorSpecialties(doctors);
+  const pathname = (await headers()).get("x-pathname") ?? "";
+  const adminRoute = isAdminRoute(pathname);
+  const nav = adminRoute ? { diseaseNav: [], specialtyNav: [] } : await getPublicNav();
+  const supabaseHost = getSupabaseHostname();
 
   return (
-    <html lang="en" data-scroll-behavior="smooth">
+    <html lang="en-NP" data-scroll-behavior="smooth">
       <head>
+        {supabaseHost ? (
+          <>
+            <link rel="dns-prefetch" href={`https://${supabaseHost}`} />
+            <link rel="preconnect" href={`https://${supabaseHost}`} crossOrigin="anonymous" />
+          </>
+        ) : null}
+        {!adminRoute ? (
+          <link rel="preload" href="/assets/img/banner.jpg" as="image" fetchPriority="high" />
+        ) : null}
         <link href="/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
         <link href="/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet" />
         <link href="/assets/css/main.css" rel="stylesheet" />
         <RouteAssets />
       </head>
-      <body className={`${roboto.variable} ${poppins.variable} ${raleway.variable}`}>
-        <JsonLd data={[organizationJsonLd(), websiteJsonLd()]} />
-        <SiteChrome diseaseNav={diseaseNav} specialtyNav={specialtyNav}>{children}</SiteChrome>
+      <body className={`${roboto.variable} ${poppins.variable}`}>
+        {!adminRoute ? (
+          <JsonLd data={[organizationJsonLd(), localBusinessJsonLd(), websiteJsonLd()]} />
+        ) : null}
+        <SiteChrome diseaseNav={nav.diseaseNav} specialtyNav={nav.specialtyNav}>
+          {children}
+        </SiteChrome>
       </body>
     </html>
   );

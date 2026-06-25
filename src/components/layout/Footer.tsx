@@ -68,7 +68,7 @@ export default function Footer() {
               </span>
             </Link>
             <p className="footer-brand-tagline">
-              Dedicated colon, rectum, and anorectal care at Everest Hospital, New Baneshwor.
+              Dedicated colon, rectum, and anorectal care in Tinkune, Kathmandu.
             </p>
             <SocialLinks className="footer-social-links" />
           </div>

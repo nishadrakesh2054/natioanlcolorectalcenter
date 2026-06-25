@@ -1,3 +1,4 @@
+import { cache } from "react";
 import { createClient } from "@supabase/supabase-js";
 import type { BlogPost, BlogSeo } from "@/lib/types/blog";
 import type { CaseStudy, CaseStudyBlock, CaseStudySeo } from "@/lib/types/case-study";
@@ -261,7 +262,7 @@ function mapDisease(row: DiseaseRow): Omit<ColorectalDisease, "slug"> {
   };
 }
 
-export async function fetchServices(): Promise<CaseService[]> {
+export const fetchServices = cache(async function fetchServices(): Promise<CaseService[]> {
   const supabase = getClient();
   if (!supabase) return [];
 
@@ -276,14 +277,14 @@ export async function fetchServices(): Promise<CaseService[]> {
   }
 
   return (data as ServiceRow[]).map(mapService);
-}
+});
 
 export async function fetchServiceById(id: number): Promise<CaseService | undefined> {
   const services = await fetchServices();
   return services.find((service) => service.id === id);
 }
 
-export async function fetchDoctors(): Promise<Doctor[]> {
+export const fetchDoctors = cache(async function fetchDoctors(): Promise<Doctor[]> {
   const supabase = getClient();
   if (!supabase) return [];
 
@@ -299,14 +300,16 @@ export async function fetchDoctors(): Promise<Doctor[]> {
   }
 
   return (data as DoctorRow[]).map(mapDoctor);
-}
+});
 
 export async function fetchDoctorById(id: number): Promise<Doctor | undefined> {
   const doctors = await fetchDoctors();
   return doctors.find((doctor) => doctor.id === id);
 }
 
-export async function fetchColorectalDiseases(): Promise<ColorectalDisease[]> {
+export const fetchColorectalDiseases = cache(async function fetchColorectalDiseases(): Promise<
+  ColorectalDisease[]
+> {
   const supabase = getClient();
   if (!supabase) return [];
 
@@ -321,7 +324,7 @@ export async function fetchColorectalDiseases(): Promise<ColorectalDisease[]> {
   }
 
   return assignDiseaseSlugs((data as DiseaseRow[]).map(mapDisease));
-}
+});
 
 export async function fetchColorectalDiseaseById(
   id: number
@@ -345,7 +348,7 @@ function mapFaq(row: FaqRow): FaqItem {
   };
 }
 
-export async function fetchFaqs(): Promise<FaqItem[]> {
+export const fetchFaqs = cache(async function fetchFaqs(): Promise<FaqItem[]> {
   const supabase = getClient();
   if (!supabase) return [];
 
@@ -361,9 +364,9 @@ export async function fetchFaqs(): Promise<FaqItem[]> {
   }
 
   return (data as FaqRow[]).map(mapFaq);
-}
+});
 
-export async function fetchGalleryItems(): Promise<GalleryItem[]> {
+export const fetchGalleryItems = cache(async function fetchGalleryItems(): Promise<GalleryItem[]> {
   const supabase = getClient();
   if (!supabase) return [];
 
@@ -379,9 +382,9 @@ export async function fetchGalleryItems(): Promise<GalleryItem[]> {
   }
 
   return (data as GalleryRow[]).map(mapGallery);
-}
+});
 
-export async function fetchTestimonials(): Promise<Testimonial[]> {
+export const fetchTestimonials = cache(async function fetchTestimonials(): Promise<Testimonial[]> {
   const supabase = getClient();
   if (!supabase) return [];
 
@@ -397,9 +400,9 @@ export async function fetchTestimonials(): Promise<Testimonial[]> {
   }
 
   return (data as TestimonialRow[]).map(mapTestimonial);
-}
+});
 
-export async function fetchBlogs(): Promise<BlogPost[]> {
+export const fetchBlogs = cache(async function fetchBlogs(): Promise<BlogPost[]> {
   const supabase = getClient();
   if (!supabase) return [];
 
@@ -415,14 +418,14 @@ export async function fetchBlogs(): Promise<BlogPost[]> {
   }
 
   return (data as BlogRow[]).map(mapBlog);
-}
+});
 
 export async function fetchBlogById(id: number): Promise<BlogPost | undefined> {
   const blogs = await fetchBlogs();
   return blogs.find((post) => post.id === id);
 }
 
-export async function fetchCaseStudies(): Promise<CaseStudy[]> {
+export const fetchCaseStudies = cache(async function fetchCaseStudies(): Promise<CaseStudy[]> {
   const supabase = getClient();
   if (!supabase) return [];
 
@@ -438,7 +441,7 @@ export async function fetchCaseStudies(): Promise<CaseStudy[]> {
   }
 
   return (data as CaseStudyRow[]).map(mapCaseStudy);
-}
+});
 
 export async function fetchCaseStudyById(id: number): Promise<CaseStudy | undefined> {
   const studies = await fetchCaseStudies();
