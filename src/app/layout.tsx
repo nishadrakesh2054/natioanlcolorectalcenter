@@ -1,6 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { headers } from "next/headers";
-import { Roboto, Poppins } from "next/font/google";
+import { Roboto, Poppins, Raleway } from "next/font/google";
 import SiteChrome from "@/components/layout/SiteChrome";
 import { JsonLd, localBusinessJsonLd, organizationJsonLd, websiteJsonLd } from "@/components/seo/JsonLd";
 import RouteAssets from "@/components/RouteAssets";
@@ -22,6 +22,14 @@ const poppins = Poppins({
   subsets: ["latin"],
   weight: ["600", "700"],
   variable: "--font-poppins",
+  display: "swap",
+  preload: false,
+});
+
+const raleway = Raleway({
+  subsets: ["latin"],
+  weight: ["500", "600", "700"],
+  variable: "--font-raleway",
   display: "swap",
   preload: false,
 });
@@ -61,7 +69,7 @@ export default async function RootLayout({
         <link href="/assets/css/main.css" rel="stylesheet" />
         <RouteAssets />
       </head>
-      <body className={`${roboto.variable} ${poppins.variable}`}>
+      <body className={`${roboto.variable} ${poppins.variable} ${raleway.variable}`}>
         {!adminRoute ? (
           <JsonLd data={[organizationJsonLd(), localBusinessJsonLd(), websiteJsonLd()]} />
         ) : null}

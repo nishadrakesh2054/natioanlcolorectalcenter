@@ -3,6 +3,7 @@
 import { Suspense } from "react";
 import { usePathname } from "next/navigation";
 import Footer from "@/components/layout/Footer";
+import FloatingQuickActions from "@/components/layout/FloatingQuickActions";
 import Header from "@/components/layout/Header";
 import ScrollTop from "@/components/layout/ScrollTop";
 import SkipToContent from "@/components/layout/SkipToContent";
@@ -35,6 +36,7 @@ export default function SiteChrome({ children, diseaseNav, specialtyNav }: SiteC
         {children}
       </main>
       <Footer />
+      <FloatingQuickActions />
       <ScrollTop />
       <MedilabScripts />
     </>

@@ -1,13 +1,13 @@
 import HeroSection from "@/components/sections/HeroSection";
 import AboutSection from "@/components/sections/AboutSection";
 import ServicesSection from "@/components/sections/ServicesSection";
-// import AppointmentSection from "@/components/sections/AppointmentSection";
 import DepartmentsSection from "@/components/sections/DepartmentsSection";
 import DoctorsSection from "@/components/sections/DoctorsSection";
 import FaqSection from "@/components/sections/FaqSection";
 import TestimonialsSection from "@/components/sections/TestimonialsSection";
 import GallerySection from "@/components/sections/GallerySection";
 import ContactSection from "@/components/sections/ContactSection";
+import HomeParallaxBand from "@/components/sections/HomeParallaxBand";
 import { getContactDepartments } from "@/lib/appointmentOptions";
 import { publicPageSeo } from "@/lib/seo";
 import {
@@ -30,8 +30,6 @@ export default async function HomePage() {
     faqs,
     testimonials,
     gallery,
-    // appointmentDepartments,
-    // appointmentDoctors,
     contactDepartments,
   ] = await Promise.all([
     fetchServices(),
@@ -47,17 +45,16 @@ export default async function HomePage() {
     <>
       <HeroSection />
       <AboutSection />
-      <DepartmentsSection diseases={diseases} />
-      {/* <AppointmentSection
-        departments={appointmentDepartments}
-        doctors={appointmentDoctors}
-      /> */}
-      <ServicesSection services={services} />
-      <DoctorsSection doctors={doctors} />
-      <FaqSection items={faqs} />
-      <TestimonialsSection items={testimonials} />
-      <GallerySection items={gallery} />
-      <ContactSection departments={contactDepartments} />
+      <div className="home-sections-flow">
+        <DepartmentsSection diseases={diseases} />
+        <ServicesSection services={services} />
+        <DoctorsSection doctors={doctors} />
+        <HomeParallaxBand />
+        <FaqSection items={faqs} />
+        <TestimonialsSection items={testimonials} />
+        <GallerySection items={gallery} />
+        <ContactSection departments={contactDepartments} />
+      </div>
     </>
   );
 }

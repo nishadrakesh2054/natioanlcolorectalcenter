@@ -581,6 +581,22 @@
   letter-spacing: 0.12em;
 }
 
+@media (min-width: 768px) {
+  #header.header .branding > .container {
+    padding-left: 0;
+  }
+
+  #header.header .logo {
+    margin-left: 0;
+    padding-left: 0;
+  }
+
+  #header.header .logo img {
+    display: block;
+    margin: 0;
+  }
+}
+
 @media (max-width: 767px) {
   #header.header .topbar {
     padding-left: 16px;
@@ -1887,7 +1903,7 @@
   color: color-mix(in srgb, var(--default-color), transparent 14%);
   flex: 1;
   display: -webkit-box;
-  -webkit-line-clamp: 3;
+ line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
@@ -3130,12 +3146,126 @@ body {
   --default-font: var(--font-roboto), system-ui, -apple-system, "Segoe UI", Roboto,
     "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif;
   --heading-font: var(--font-poppins), sans-serif;
-  --nav-font: var(--font-poppins), sans-serif;
+  --nav-font: var(--font-raleway), sans-serif;
 }
 
 .main > .section:not(#hero) {
   content-visibility: auto;
   contain-intrinsic-size: auto 520px;
+}
+
+/*--------------------------------------------------------------
+# Home page — alternating section backgrounds & parallax band
+# (scoped to .home-sections-flow only — does not affect #header)
+--------------------------------------------------------------*/
+#header.header {
+  background-color: var(--background-color);
+}
+
+#header.header .branding {
+  background-color: var(--background-color);
+}
+
+.home-sections-flow {
+  --home-section-white: #ffffff;
+  --home-section-blue: #eef4fc;
+  --home-section-blue-soft: #f6f9fe;
+}
+
+.home-sections-flow > .section {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.home-sections-flow > .section:nth-child(odd) {
+  background-color: var(--home-section-blue);
+}
+
+.home-sections-flow > .section:nth-child(even) {
+  background-color: var(--home-section-white);
+}
+
+.home-sections-flow > .section.light-background {
+  background-color: inherit;
+}
+
+.home-sections-flow > .section::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background:
+    radial-gradient(
+      ellipse 80% 55% at 100% 0%,
+      color-mix(in srgb, var(--accent-color), transparent 88%),
+      transparent 70%
+    ),
+    radial-gradient(
+      ellipse 70% 50% at 0% 100%,
+      color-mix(in srgb, var(--accent-color), transparent 92%),
+      transparent 68%
+    );
+}
+
+.home-sections-flow > .section:nth-child(even)::before {
+  opacity: 0.55;
+}
+
+.home-sections-flow > .section > .container,
+.home-sections-flow > .section > .container-fluid,
+.home-sections-flow > .section > .mb-5 {
+  position: relative;
+  z-index: 1;
+}
+
+.home-sections-flow .section-title h2 {
+  color: var(--heading-color);
+}
+
+.home-sections-flow .disease-card,
+.home-sections-flow .service-item,
+.home-sections-flow .team-member,
+.home-sections-flow .faq-item,
+.home-sections-flow .testimonial-item,
+.home-sections-flow .gallery-item {
+  background: var(--home-section-white);
+}
+
+.home-parallax-band {
+  position: relative;
+  min-height: 200px;
+  background-image: url("/assets/img/banner.jpg");
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+}
+
+.home-parallax-band::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    color-mix(in srgb, var(--accent-color), transparent 8%),
+    color-mix(in srgb, var(--accent-color), transparent 22%)
+  );
+  opacity: 0.88;
+}
+
+@media (max-width: 991px) {
+  .home-parallax-band {
+    min-height: 150px;
+    background-attachment: scroll;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .home-parallax-band {
+    background-attachment: scroll;
+  }
 }
 
 .testimonials-carousel-placeholder {
@@ -3589,4 +3719,112 @@ body {
 
 .contact .php-email-form textarea {
   padding: 10px 12px;
+}
+
+/*--------------------------------------------------------------
+# Floating quick actions (right center)
+--------------------------------------------------------------*/
+.floating-quick-actions {
+  position: fixed;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 996;
+}
+
+.floating-quick-actions-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 3px;
+}
+
+.floating-quick-actions-list li {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.floating-quick-action {
+  display: inline-flex;
+  align-items: center;
+  flex-direction: row-reverse;
+  justify-content: flex-start;
+  max-width: 44px;
+  height: 44px;
+  overflow: hidden;
+  color: var(--contrast-color);
+  text-decoration: none;
+  background: var(--brand-secondary);
+  box-shadow: -4px 0 14px rgba(0, 0, 0, 0.14);
+  transition: max-width 0.28s ease, background-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.floating-quick-action:hover,
+.floating-quick-action:focus-visible {
+  max-width: 20rem;
+  background: color-mix(in srgb, var(--brand-secondary), #000 12%);
+  color: var(--contrast-color);
+  box-shadow: -6px 0 18px rgba(0, 0, 0, 0.2);
+  z-index: 2;
+  position: relative;
+}
+
+.floating-quick-action-icon {
+  flex-shrink: 0;
+  width: 44px;
+  height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.15rem;
+  line-height: 1;
+}
+
+.floating-quick-action-label {
+  white-space: nowrap;
+  max-width: 0;
+  padding: 0;
+  overflow: hidden;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  line-height: 1.2;
+  opacity: 0;
+  transform: translateX(8px);
+  transition:
+    max-width 0.28s ease,
+    padding 0.28s ease,
+    opacity 0.22s ease,
+    transform 0.22s ease;
+}
+
+.floating-quick-action:hover .floating-quick-action-label,
+.floating-quick-action:focus-visible .floating-quick-action-label {
+  max-width: 12rem;
+  padding: 4px 10px 4px 8px;
+  opacity: 1;
+  transform: translateX(0);
+}
+
+@media (max-width: 767px) {
+  .floating-quick-action {
+    max-width: 40px;
+    height: 40px;
+  }
+
+  .floating-quick-action-icon {
+    width: 40px;
+    height: 40px;
+    font-size: 1.05rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .floating-quick-action,
+  .floating-quick-action-label {
+    transition: none;
+  }
 }
