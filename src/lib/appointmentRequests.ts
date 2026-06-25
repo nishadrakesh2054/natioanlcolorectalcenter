@@ -3,7 +3,6 @@ import {
   getAppointmentDoctors,
   getOptionLabel,
 } from "@/lib/appointmentOptions";
-import { createClient } from "@/utils/supabase/client";
 
 export type AppointmentRequestInput = {
   name: string;
@@ -18,7 +17,7 @@ export type AppointmentRequestInput = {
   message: string | null;
 };
 
-async function parseAppointmentForm(
+export async function parseAppointmentForm(
   formData: FormData
 ): Promise<AppointmentRequestInput | { error: string }> {
   const [departments, doctors] = await Promise.all([
@@ -71,23 +70,18 @@ async function parseAppointmentForm(
 export async function submitAppointmentRequest(
   formData: FormData
 ): Promise<{ error?: string }> {
-  const parsed = await parseAppointmentForm(formData);
+  const response = await fetch("/api/appointment", {
+    method: "POST",
+    body: formData,
+  });
 
-  if ("error" in parsed) {
-    return { error: parsed.error };
-  }
+  const data = (await response.json()) as { error?: string };
 
-  if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY) {
-    return { error: "Appointment form is not configured. Please call us directly." };
-  }
-
-  const supabase = createClient();
-  const { error } = await supabase.from("appointment_requests").insert(parsed);
-
-  if (error) {
-    console.error("Appointment submission failed:", error.message);
+  if (!response.ok) {
     return {
-      error: "Unable to submit your appointment right now. Please try again or call us directly.",
+      error:
+        data.error ??
+        "Unable to submit your appointment right now. Please try again or call us directly.",
     };
   }
 

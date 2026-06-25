@@ -1,5 +1,4 @@
 import { getContactDepartments, getOptionLabel } from "@/lib/appointmentOptions";
-import { createClient } from "@/utils/supabase/client";
 
 export type ContactMessageInput = {
   name: string;
@@ -9,7 +8,7 @@ export type ContactMessageInput = {
   message: string;
 };
 
-async function parseContactForm(
+export async function parseContactForm(
   formData: FormData
 ): Promise<ContactMessageInput | { error: string }> {
   const departments = await getContactDepartments();
@@ -39,23 +38,18 @@ async function parseContactForm(
 export async function submitContactMessage(
   formData: FormData
 ): Promise<{ error?: string }> {
-  const parsed = await parseContactForm(formData);
+  const response = await fetch("/api/contact", {
+    method: "POST",
+    body: formData,
+  });
 
-  if ("error" in parsed) {
-    return { error: parsed.error };
-  }
+  const data = (await response.json()) as { error?: string };
 
-  if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY) {
-    return { error: "Contact form is not configured. Please call us directly." };
-  }
-
-  const supabase = createClient();
-  const { error } = await supabase.from("contact_messages").insert(parsed);
-
-  if (error) {
-    console.error("Contact form submission failed:", error.message);
+  if (!response.ok) {
     return {
-      error: "Unable to send your message right now. Please try again or call us directly.",
+      error:
+        data.error ??
+        "Unable to send your message right now. Please try again or call us directly.",
     };
   }
 
