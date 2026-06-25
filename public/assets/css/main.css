@@ -268,7 +268,8 @@ h6 {
   text-decoration: underline;
 }
 
-.header .topbar .social-links a {
+.header .topbar .social-links a,
+.header .topbar .social-links .social-link-pending {
   color: var(--contrast-color);
   line-height: 0;
   transition: 0.3s;

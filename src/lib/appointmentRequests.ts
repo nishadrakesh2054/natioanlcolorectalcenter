@@ -9,6 +9,9 @@ export type AppointmentRequestInput = {
   name: string;
   email: string;
   phone: string;
+  age: string | null;
+  gender: string | null;
+  weight: string | null;
   appointment_at: string;
   department: string;
   doctor: string;
@@ -26,6 +29,9 @@ async function parseAppointmentForm(
   const name = String(formData.get("name") ?? "").trim();
   const email = String(formData.get("email") ?? "").trim();
   const phone = String(formData.get("phone") ?? "").trim();
+  const ageRaw = String(formData.get("age") ?? "").trim();
+  const genderRaw = String(formData.get("gender") ?? "").trim();
+  const weightRaw = String(formData.get("weight") ?? "").trim();
   const appointmentAtRaw = String(formData.get("date") ?? "").trim();
   const departmentValue = String(formData.get("department") ?? "").trim();
   const doctorValue = String(formData.get("doctor") ?? "").trim();
@@ -52,6 +58,9 @@ async function parseAppointmentForm(
     name,
     email,
     phone,
+    age: ageRaw || null,
+    gender: genderRaw || null,
+    weight: weightRaw || null,
     appointment_at: appointmentAt.toISOString(),
     department: getOptionLabel(departments, departmentValue),
     doctor: getOptionLabel(doctors, doctorValue),

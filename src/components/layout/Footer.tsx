@@ -12,7 +12,7 @@ const usefulLinks = [
 ];
 
 const patientLinks = [
-  { href: "/departments", label: "Colorectal diseases" },
+  { href: "/colorectal-disease", label: "Colorectal diseases" },
   { href: "/doctors", label: "Our doctors" },
   { href: "/faq", label: "FAQ" },
   { href: "/blogs", label: "Blogs" },

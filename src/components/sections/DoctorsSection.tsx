@@ -6,17 +6,27 @@ import { getDoctorImage, getDoctorSocialLinks } from "@/lib/doctor-utils";
 
 type DoctorsSectionProps = {
   doctors: Doctor[];
+  activeSpecialty?: string | null;
 };
 
-export default function DoctorsSection({ doctors }: DoctorsSectionProps) {
+export default function DoctorsSection({ doctors, activeSpecialty = null }: DoctorsSectionProps) {
   return (
     <section id="doctors" className="doctors section">
       <div className="container section-title" data-aos="fade-up">
-        <h2>Doctors</h2>
-        <p>Meet our experienced colorectal, pediatric, and gastroenterology specialists at NCRC.</p>
+        <h2>{activeSpecialty ? `${activeSpecialty} Specialists` : "Doctors"}</h2>
+        <p>
+          {activeSpecialty
+            ? `Meet our ${activeSpecialty.toLowerCase()} specialists at NCRC.`
+            : "Meet our experienced colorectal, pediatric, and gastroenterology specialists at NCRC."}
+        </p>
       </div>
 
       <div className="container">
+        {doctors.length === 0 ? (
+          <p className="doctors-empty-message" data-aos="fade-up">
+            No doctors are listed for this specialty right now.
+          </p>
+        ) : (
         <div className="row gy-4">
           {doctors.map((doctor, index) => (
             <div
@@ -54,6 +64,7 @@ export default function DoctorsSection({ doctors }: DoctorsSectionProps) {
             </div>
           ))}
         </div>
+        )}
       </div>
     </section>
   );

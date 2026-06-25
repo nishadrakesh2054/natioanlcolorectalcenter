@@ -173,11 +173,19 @@ export const publicPageSeo = {
     path: "/doctors",
     keywords: ["colorectal surgeons Nepal", "NCRC doctors", "gastroenterology specialists"],
   }),
+  colorectalDisease: createPageMetadata({
+    title: "Colorectal Diseases",
+    description:
+      "Explore colorectal conditions treated at NCRC including piles, fissure, fistula, colon cancer, and more.",
+    path: "/colorectal-disease",
+    keywords: ["piles", "anal fissure", "fistula", "colon cancer", "colorectal conditions"],
+  }),
+  /** @deprecated Use colorectalDisease */
   departments: createPageMetadata({
     title: "Colorectal Diseases",
     description:
       "Explore colorectal conditions treated at NCRC including piles, fissure, fistula, colon cancer, and more.",
-    path: "/departments",
+    path: "/colorectal-disease",
     keywords: ["piles", "anal fissure", "fistula", "colon cancer", "colorectal conditions"],
   }),
   faq: createPageMetadata({

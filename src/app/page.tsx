@@ -1,7 +1,7 @@
 import HeroSection from "@/components/sections/HeroSection";
 import AboutSection from "@/components/sections/AboutSection";
 import ServicesSection from "@/components/sections/ServicesSection";
-import AppointmentSection from "@/components/sections/AppointmentSection";
+// import AppointmentSection from "@/components/sections/AppointmentSection";
 import DepartmentsSection from "@/components/sections/DepartmentsSection";
 import DoctorsSection from "@/components/sections/DoctorsSection";
 import FaqSection from "@/components/sections/FaqSection";
@@ -30,8 +30,8 @@ export default async function HomePage() {
     faqs,
     testimonials,
     gallery,
-    appointmentDepartments,
-    appointmentDoctors,
+    // appointmentDepartments,
+    // appointmentDoctors,
     contactDepartments,
   ] = await Promise.all([
     fetchServices(),
@@ -50,10 +50,10 @@ export default async function HomePage() {
       <HeroSection />
       <AboutSection />
       <DepartmentsSection diseases={diseases} />
-      <AppointmentSection
+      {/* <AppointmentSection
         departments={appointmentDepartments}
         doctors={appointmentDoctors}
-      />
+      /> */}
       <ServicesSection services={services} />
       <DoctorsSection doctors={doctors} />
       <FaqSection items={faqs} />

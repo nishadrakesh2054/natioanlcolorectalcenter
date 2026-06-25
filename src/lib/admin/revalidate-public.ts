@@ -13,8 +13,8 @@ const RESOURCE_PUBLIC_PATHS: Record<
     detailPath: (id) => `/doctors/${id}`,
   },
   diseases: {
-    paths: ["/departments", "/about"],
-    detailPath: (id) => `/departments/${id}`,
+    paths: ["/colorectal-disease", "/about"],
+    detailPath: (id) => `/colorectal-disease/${id}`,
   },
   faq: {
     paths: ["/faq", "/about"],

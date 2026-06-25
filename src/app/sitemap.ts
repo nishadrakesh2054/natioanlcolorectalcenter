@@ -15,7 +15,7 @@ const staticPaths = [
   { path: "/about", priority: 0.9, changeFrequency: "monthly" as const },
   { path: "/services", priority: 0.9, changeFrequency: "weekly" as const },
   { path: "/doctors", priority: 0.9, changeFrequency: "weekly" as const },
-  { path: "/departments", priority: 0.9, changeFrequency: "weekly" as const },
+  { path: "/colorectal-disease", priority: 0.9, changeFrequency: "weekly" as const },
   { path: "/faq", priority: 0.8, changeFrequency: "monthly" as const },
   { path: "/gallery", priority: 0.7, changeFrequency: "monthly" as const },
   { path: "/testimonials", priority: 0.7, changeFrequency: "monthly" as const },
@@ -58,7 +58,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.8,
     })),
     ...diseases.map((item) => ({
-      url: `${base}/departments/${item.id}`,
+      url: `${base}/colorectal-disease/${item.slug}`,
       lastModified: now,
       changeFrequency: "monthly" as const,
       priority: 0.8,

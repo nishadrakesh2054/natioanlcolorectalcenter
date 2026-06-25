@@ -3,6 +3,7 @@ import type { BlogPost, BlogSeo } from "@/lib/types/blog";
 import type { CaseStudy, CaseStudyBlock, CaseStudySeo } from "@/lib/types/case-study";
 import type { CaseService } from "@/lib/types/case-service";
 import type { ColorectalDisease } from "@/lib/types/colorectal-disease";
+import { assignDiseaseSlugs } from "@/lib/disease-utils";
 import type { Doctor, DoctorAward, DoctorJournal, DoctorSocialLink } from "@/lib/types/doctor";
 import type { FaqItem } from "@/lib/types/faq";
 import type { GalleryItem } from "@/lib/types/gallery";
@@ -38,6 +39,7 @@ type DoctorRow = {
   category: string;
   social_links: DoctorSocialLink[] | null;
   sort_order: number;
+  is_active: boolean;
 };
 
 type FaqRow = {
@@ -242,7 +244,7 @@ function mapDoctor(row: DoctorRow): Doctor {
   };
 }
 
-function mapDisease(row: DiseaseRow): ColorectalDisease {
+function mapDisease(row: DiseaseRow): Omit<ColorectalDisease, "slug"> {
   const images = Array.isArray(row.images)
     ? row.images.map((src) => String(src).trim()).filter(Boolean)
     : [];
@@ -288,6 +290,7 @@ export async function fetchDoctors(): Promise<Doctor[]> {
   const { data, error } = await supabase
     .from("doctors")
     .select("*")
+    .eq("is_active", true)
     .order("sort_order", { ascending: true });
 
   if (error || !data?.length) {
@@ -317,7 +320,7 @@ export async function fetchColorectalDiseases(): Promise<ColorectalDisease[]> {
     return [];
   }
 
-  return (data as DiseaseRow[]).map(mapDisease);
+  return assignDiseaseSlugs((data as DiseaseRow[]).map(mapDisease));
 }
 
 export async function fetchColorectalDiseaseById(
@@ -325,6 +328,13 @@ export async function fetchColorectalDiseaseById(
 ): Promise<ColorectalDisease | undefined> {
   const diseases = await fetchColorectalDiseases();
   return diseases.find((disease) => disease.id === id);
+}
+
+export async function fetchColorectalDiseaseBySlug(
+  slug: string
+): Promise<ColorectalDisease | undefined> {
+  const diseases = await fetchColorectalDiseases();
+  return diseases.find((disease) => disease.slug === slug);
 }
 
 function mapFaq(row: FaqRow): FaqItem {

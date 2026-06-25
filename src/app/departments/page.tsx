@@ -1,19 +1,25 @@
-import type { Metadata } from "next";
-import PageTitle from "@/components/layout/PageTitle";
-import DepartmentsSection from "@/components/sections/DepartmentsSection";
-import { publicPageSeo } from "@/lib/seo";
-import { fetchColorectalDiseases } from "@/lib/supabase/fetch-content";
+import { redirect } from "next/navigation";
+import {
+  COLORECTAL_DISEASE_INDEX_PATH,
+  getColorectalDiseasePath,
+} from "@/lib/disease-utils";
+import { fetchColorectalDiseaseById } from "@/lib/supabase/fetch-content";
 
-export const metadata: Metadata = publicPageSeo.departments;
-export const revalidate = 60;
+type LegacyDepartmentsPageProps = {
+  searchParams: Promise<{ disease?: string }>;
+};
 
-export default async function DepartmentsPage() {
-  const diseases = await fetchColorectalDiseases();
+export default async function LegacyDepartmentsPage({
+  searchParams,
+}: LegacyDepartmentsPageProps) {
+  const { disease } = await searchParams;
 
-  return (
-    <>
-      <PageTitle title="Colorectal Disease" />
-      <DepartmentsSection diseases={diseases} />
-    </>
-  );
+  if (disease) {
+    const record = await fetchColorectalDiseaseById(Number(disease));
+    if (record) {
+      redirect(getColorectalDiseasePath(record.slug));
+    }
+  }
+
+  redirect(COLORECTAL_DISEASE_INDEX_PATH);
 }

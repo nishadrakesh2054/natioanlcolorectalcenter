@@ -12,6 +12,7 @@ export type DiseaseContentSection = {
 
 export type ColorectalDisease = {
   id: number;
+  slug: string;
   /** Primary image (first of `images`) for SEO and legacy use */
   image: string;
   images: string[];

@@ -30,7 +30,7 @@ export default function HeroSection() {
   return (
     <section id="hero" className="hero section light-background">
       <SiteImage
-        src="/assets/img/hero-bg.jpg"
+        src="/assets/img/banner.jpg"
         alt="National Colorectal Center — expert colorectal care in Nepal"
         fill
         priority

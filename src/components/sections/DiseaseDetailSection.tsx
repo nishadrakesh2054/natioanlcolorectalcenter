@@ -2,6 +2,7 @@ import Link from "next/link";
 import SocialLinks from "@/components/layout/SocialLinks";
 import DiseaseDetailContent from "@/components/sections/DiseaseDetailContent";
 import DiseaseImageGallery from "@/components/ui/DiseaseImageGallery";
+import { COLORECTAL_DISEASE_INDEX_PATH } from "@/lib/disease-utils";
 import type { ColorectalDisease } from "@/lib/types/colorectal-disease";
 
 type DiseaseDetailSectionProps = {
@@ -35,7 +36,7 @@ export default function DiseaseDetailSection({ disease }: DiseaseDetailSectionPr
                   <Link href="/appointment" className="cta-btn">
                     Make an Appointment
                   </Link>
-                  <Link href="/departments" className="cta-btn cta-btn-outline">
+                  <Link href={COLORECTAL_DISEASE_INDEX_PATH} className="cta-btn cta-btn-outline">
                     All Diseases
                   </Link>
                 </div>

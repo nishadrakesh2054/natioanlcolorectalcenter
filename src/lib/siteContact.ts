@@ -2,7 +2,7 @@ export const siteContact = {
   name: "National Colorectal Center",
   shortName: "NCRC",
   headerBrand: {
-    line1: "NationalColorectal",
+    line1: "National Colorectal",
     line2: "Center",
   },
   logo: "/assets/img/logo.png",
@@ -14,22 +14,27 @@ export const siteContact = {
   phones: {
     display: "9817073670 / 9861555976",
     header: "9861555976",
+    appointment: "+977 9817073670",
+    appointmentTel: "+9779817073670",
     rakesh: "+977-9817073670",
     binay: "+977-9861555976",
     telRakesh: "+9779817073670",
     telBinay: "+9779861555976",
   },
   address: {
-    line1: "Everest Hospital",
-    line2: "New Baneshwor",
-    full: "Everest Hospital, New Baneshwor",
+    line1: "Tinkune, 32 Sudidhanagar Marg",
+    line2: "Kathmandu 44600, next to VS Niketan College",
+    full: "Tinkune, 32 Sudidhanagar Marg, Kathmandu 44600, next to VS Niketan College",
   },
   mapEmbedUrl:
-    "https://maps.google.com/maps?q=Everest+Hospital,+New+Baneshwor,+Kathmandu,+Nepal&output=embed",
+    "https://maps.google.com/maps?q=VS+Niketan+College,+Tinkune,+Kathmandu,+Nepal&output=embed",
+  mapDirectionsUrl:
+    "https://www.google.com/maps/search/?api=1&query=VS+Niketan+College,+Tinkune,+Kathmandu,+Nepal",
   social: {
     facebook: "https://www.facebook.com/ncrcnep",
     instagram: "",
-    whatsapp: "https://wa.me/9817073670",
+    whatsapp: "https://wa.me/9779817073670",
+    viber: "viber://chat?number=9779817073670",
     tiktok: "",
   },
 } as const;
